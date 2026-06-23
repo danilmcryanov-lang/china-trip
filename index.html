@@ -136,11 +136,11 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-handle { width: 36px; height: 5px; background: var(--border); border-radius: 3px; margin: 0 auto 16px; }
 
+        .gold-line { height: 2px; background: var(--gold); border-radius: 1px; }
+
         .sticky-tabs-wrap {
             position: sticky; top: 60px; z-index: 50; background: var(--bg);
             padding: 10px 16px; margin: 0 -16px;
-            border-top: 2px solid var(--gold);
-            border-bottom: 2px solid var(--gold);
         }
 
         .view-toggle {
@@ -191,26 +191,13 @@
         .week-list { display: flex; flex-direction: column; gap: 6px; }
         .week-day-card {
             background: var(--card-bg); border-radius: var(--radius-sm); padding: 10px 12px;
-            border: 2px solid transparent; transition: all 0.15s; box-shadow: var(--shadow-sm);
+            border: 2px solid transparent; box-shadow: var(--shadow-sm);
         }
         .week-day-card.today { border-color: var(--primary); }
         .week-day-card.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
         .week-day-card .week-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .week-day-card .week-card-date { font-weight: 700; font-size: 14px; }
         .week-day-card .week-card-day { font-size: 11px; color: var(--text-secondary); }
-        .week-day-card .week-events-list { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
-        .week-expanded-event { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
-        .week-expanded-event .checkbox {
-            width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px;
-            flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
-        }
-        .week-expanded-event .checkbox.checked { background: var(--success); border-color: var(--success); }
-        .week-expanded-event .checkbox.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: bold; }
-        .week-expanded-event .delete-event-btn {
-            opacity: 0; background: none; border: none; color: var(--danger);
-            cursor: pointer; font-size: 14px; padding: 2px; transition: opacity 0.2s;
-        }
-        .week-day-card:active .delete-event-btn { opacity: 1; }
 
         .progress-bar { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--success); border-radius: 3px; transition: width 0.3s ease; }
@@ -298,6 +285,13 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* Ключевые события */
+        .key-event-list-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .key-event-list-item:last-child { border-bottom: none; }
+
         @media (max-width: 380px) {
             .calendar-day { font-size: 11px; min-height: 30px; }
             .nav-item { padding: 4px 6px; font-size: 9px; }
@@ -317,6 +311,7 @@
             </div>
         </div>
         <div class="header-actions">
+            <button class="icon-btn" id="key-events-btn" title="Ключевые события">🔑</button>
             <button class="icon-btn" id="notify-toggle" title="Уведомления">🔔</button>
             <button class="icon-btn" id="theme-toggle" title="Тема">🌓</button>
         </div>
@@ -324,12 +319,14 @@
 
     <!-- Вкладка 1: Календарь -->
     <div id="tab-calendar" style="display:none;">
+        <div class="gold-line"></div>
         <div class="sticky-tabs-wrap">
             <div class="view-toggle">
                 <button class="active" data-view="month">🗓️ Месяц</button>
                 <button data-view="week">📋 Неделя</button>
             </div>
         </div>
+        <div class="gold-line"></div>
         <div id="view-month">
             <div class="calendar-nav">
                 <button id="cal-prev">◀</button>
@@ -353,12 +350,14 @@
 
     <!-- Вкладка 2: Чек-лист -->
     <div id="tab-checklist" style="display:none;">
+        <div class="gold-line"></div>
         <div class="sticky-tabs-wrap">
             <div class="checklist-tabs">
                 <button class="active" data-user="danil">👤 Данил</button>
                 <button data-user="nastya">👤 Анастасия</button>
             </div>
         </div>
+        <div class="gold-line"></div>
         <div id="checklist-danil-panel">
             <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
             <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
@@ -381,6 +380,7 @@
 
     <!-- Вкладка 3: Поездки -->
     <div id="tab-trips" style="display:none;">
+        <div class="gold-line"></div>
         <div class="section-title">🗺️ Варианты поездок</div>
         <div id="trips-list"></div>
         <button class="fab" id="add-trip-fab">+</button>
@@ -388,6 +388,7 @@
 
     <!-- Вкладка 4: Хранилище -->
     <div id="tab-storage" style="display:none;">
+        <div class="gold-line"></div>
         <div class="section-title">📂 Документы и файлы</div>
         <div id="storage-list"></div>
         <button class="fab" id="add-storage-fab">+</button>
@@ -431,6 +432,9 @@
         <label style="font-size:12px;color:var(--text-secondary);">Дата:</label>
         <input type="date" class="input" id="event-date-input" style="margin:6px 0 10px;" />
         <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin-bottom:10px;" />
+        <label style="display:flex;align-items:center;gap:6px;font-size:14px;margin-bottom:10px;">
+            <input type="checkbox" id="event-key-checkbox" /> Ключевое событие
+        </label>
         <div style="display:flex;gap:8px;margin-top:14px;">
             <button class="btn secondary full" id="cancel-event-btn">Отмена</button>
             <button class="btn primary full" id="save-event-btn">Сохранить</button>
@@ -485,6 +489,17 @@
         <div id="storage-loading" style="display:none;text-align:center;padding:10px;"><span class="loading-spinner"></span> Загрузка файлов...</div>
     </div>
 </div>
+
+<!-- Модальное окно: Ключевые события -->
+<div class="modal-overlay" id="modal-key-events" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3>🔑 Ключевые события</h3>
+        <div id="key-events-list" style="margin-top:12px;">
+            <div class="empty-state"><div class="empty-icon">🔑</div><p>Нет ключевых событий</p></div>
+        </div>
+    </div>
+</div>
 <script type="module">
     import { initializeApp } from 'firebase/app';
     import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
@@ -536,7 +551,6 @@
         });
     }
 
-    // Сжатие изображения до разумных размеров
     function compressImage(file, maxWidth = 800, quality = 0.7) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -545,12 +559,8 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     let width = img.width, height = img.height;
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
+                    if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     resolve(canvas.toDataURL('image/jpeg', quality));
@@ -563,7 +573,6 @@
         });
     }
 
-    // Запись события (eventId больше не генерируется внутри)
     async function saveEvent(date, eventId, data) {
         await setDoc(doc(db, 'events', date + '_' + eventId), { date, ...data, eventId });
     }
@@ -573,55 +582,33 @@
 
     async function saveTrip(trip) {
         try {
-            if (!trip.id) {
-                const ref = doc(collection(db, 'trips'));
-                trip.id = ref.id;
-                await setDoc(ref, trip);
-            } else {
-                await setDoc(doc(db, 'trips', trip.id), trip);
-            }
-            // обновляем кэш только после успешной записи
+            if (!trip.id) { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
+            else { await setDoc(doc(db, 'trips', trip.id), trip); }
             const idx = tripsCache.findIndex(t => t.id === trip.id);
-            if (idx >= 0) {
-                tripsCache[idx] = { ...trip, _local: false };
-            } else {
-                tripsCache.push({ ...trip, _local: false });
-            }
+            if (idx >= 0) tripsCache[idx] = { ...trip, _local: false };
+            else tripsCache.push({ ...trip, _local: false });
             tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
             if (currentTab === 'trips') renderTrips();
             if (currentTab === 'calendar') renderDayEvents();
-        } catch(e) {
-            alert('Ошибка сохранения поездки. Возможно, файл слишком большой.');
-            throw e;
-        }
+        } catch(e) { alert('Ошибка сохранения поездки. Возможно, файл слишком большой.'); throw e; }
     }
 
     async function deleteTrip(tripId) { await deleteDoc(doc(db, 'trips', tripId)); }
 
     async function saveStorageItem(item) {
         try {
-            if (!item.id) {
-                const ref = doc(collection(db, 'storage'));
-                item.id = ref.id;
-                await setDoc(ref, item);
-            } else {
-                await setDoc(doc(db, 'storage', item.id), item);
-            }
+            if (!item.id) { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
+            else { await setDoc(doc(db, 'storage', item.id), item); }
             const idx = storageCache.findIndex(s => s.id === item.id);
-            if (idx >= 0) {
-                storageCache[idx] = { ...item, _local: false };
-            } else {
-                storageCache.push({ ...item, _local: false });
-            }
+            if (idx >= 0) storageCache[idx] = { ...item, _local: false };
+            else storageCache.push({ ...item, _local: false });
             if (currentTab === 'storage') renderStorage();
-        } catch(e) {
-            alert('Ошибка сохранения файлов. Возможно, файл слишком большой.');
-            throw e;
-        }
+        } catch(e) { alert('Ошибка сохранения файлов. Возможно, файл слишком большой.'); throw e; }
     }
 
     async function deleteStorageItem(itemId) { await deleteDoc(doc(db, 'storage', itemId)); }
-        function subscribeAll() {
+
+    function subscribeAll() {
         onSnapshot(collection(db, 'events'), (snap) => {
             eventsCache = {};
             snap.forEach(d => { const data = d.data(); if (!eventsCache[data.date]) eventsCache[data.date] = []; eventsCache[data.date].push(data); });
@@ -665,25 +652,25 @@
         document.getElementById('file-viewer-name').textContent = file.name;
         document.getElementById('file-viewer-content').innerHTML = '';
         if (file.type === 'pdf') {
-            // Преобразуем base64 в Blob для корректного отображения всех страниц на мобильных
             const base64 = file.data.split(',')[1];
             const byteCharacters = atob(base64);
             const byteArrays = [];
             for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
                 const slice = byteCharacters.slice(offset, offset + 1024);
                 const byteNumbers = new Array(slice.length);
-                for (let i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
+                for (let i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i);
                 byteArrays.push(new Uint8Array(byteNumbers));
             }
             const blob = new Blob(byteArrays, { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
-            const iframe = document.createElement('iframe');
-            iframe.src = blobUrl;
-            iframe.onload = () => URL.revokeObjectURL(blobUrl);
-            iframe.style.minHeight = '80vh';
-            document.getElementById('file-viewer-content').appendChild(iframe);
+            const embedEl = document.createElement('embed');
+            embedEl.src = blobUrl;
+            embedEl.type = 'application/pdf';
+            embedEl.style.width = '100%';
+            embedEl.style.height = '100%';
+            embedEl.style.minHeight = '80vh';
+            embedEl.onload = () => URL.revokeObjectURL(blobUrl);
+            document.getElementById('file-viewer-content').appendChild(embedEl);
         } else {
             const img = document.createElement('img');
             img.src = file.data;
@@ -740,44 +727,50 @@
             const dayEvents = eventsCache[dateStr] || [];
             const tripEventIds = new Set(dayEvents.map(e => e.eventId));
             const allEvents = [...dayEvents];
-            // Добавляем события из поездок, только если их ещё нет в dayEvents
             tripsCache.filter(t => t.scheduledDate === dateStr).forEach(trip => {
                 const eid = 'trip_' + trip.id;
-                if (!tripEventIds.has(eid)) {
-                    allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, isTrip: true, tripId: trip.id, done: false, date: dateStr });
+                if (!tripEventIds.has(eid)) allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, isTrip: true, tripId: trip.id, done: false, date: dateStr });
+            });
+
+            let eventsHtml = '';
+            allEvents.forEach(e => {
+                if (e.isTrip) {
+                    const trip = tripsCache.find(t => t.id === e.tripId);
+                    const imgHtml = trip?.image ? `<img src="${trip.image}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0;" />` : '';
+                    eventsHtml += `<div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="true" data-trip-id="${e.tripId||''}">
+                        <div class="checkbox${e.done?' checked':''}"></div>
+                        ${imgHtml}
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-weight:600;font-size:13px;">${escapeHtml(trip?.title||'')}</div>
+                            <div style="font-size:11px;color:var(--text-secondary);white-space:pre-wrap;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${escapeHtml(trip?.note||'')}</div>
+                        </div>
+                        <button class="delete-event-btn">✕</button>
+                    </div>`;
+                } else {
+                    eventsHtml += `<div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}">
+                        <div class="checkbox${e.done?' checked':''}"></div>
+                        <span style="flex:1;${e.done?'text-decoration:line-through;color:var(--text-secondary);':''}">${escapeHtml(e.title)}</span>
+                        <button class="delete-event-btn">✕</button>
+                    </div>`;
                 }
             });
 
-            const eventsHtml = allEvents.map(e => `
-                <div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="${e.isTrip||false}" data-trip-id="${e.tripId||''}">
-                    <div class="checkbox${e.done?' checked':''}"></div>
-                    <span style="flex:1;${e.done?'text-decoration:line-through;color:var(--text-secondary);':''}">${escapeHtml(e.title)}</span>
-                    <button class="delete-event-btn">✕</button>
-                </div>
-            `).join('');
+            card.innerHTML = `<div class="week-card-header">
+                <span class="week-card-date">${day.getDate()} ${months[day.getMonth()]}</span>
+                <span class="week-card-day">${dayNames[i]}</span>
+            </div>
+            <div class="week-events-list">${eventsHtml || '<div style="font-size:12px;color:var(--text-secondary);">Нет событий</div>'}</div>`;
 
-            card.innerHTML = `
-                <div class="week-card-header">
-                    <span class="week-card-date">${day.getDate()} ${months[day.getMonth()]}</span>
-                    <span class="week-card-day">${dayNames[i]}</span>
-                </div>
-                <div class="week-events-list">${eventsHtml || '<div style="font-size:12px;color:var(--text-secondary);">Нет событий</div>'}</div>
-            `;
-            // Обработчики чекбоксов и удаления
             card.querySelectorAll('.week-expanded-event').forEach(evRow => {
                 evRow.querySelector('.checkbox').addEventListener('click', async (ev) => {
                     ev.stopPropagation();
                     const eventId = evRow.dataset.eventId;
                     const date = evRow.dataset.date;
                     const evData = (eventsCache[date] || []).find(e => e.eventId === eventId);
-                    if (evData) {
-                        evData.done = !evData.done;
-                        await saveEvent(date, eventId, evData);
-                    } else {
-                        await saveEvent(date, eventId, { eventId, title: evRow.querySelector('span').textContent, time: '', date, done: true });
-                    }
+                    if (evData) { evData.done = !evData.done; await saveEvent(date, eventId, evData); }
+                    else { await saveEvent(date, eventId, { eventId, title: evRow.querySelector('span')?.textContent || '', time: '', date, done: true }); }
                 });
-                evRow.querySelector('.delete-event-btn').addEventListener('click', async (ev) => {
+                evRow.querySelector('.delete-event-btn')?.addEventListener('click', async (ev) => {
                     ev.stopPropagation();
                     if (confirm('Удалить событие?')) {
                         if (evRow.dataset.isTrip === 'true') {
@@ -799,35 +792,45 @@
 
         const dayEvents = eventsCache[selectedDate] || [];
         const tripEventIds = new Set(dayEvents.map(e => e.eventId));
-        // Добавляем поездки, только если их нет в кэше
         const allEvents = [...dayEvents];
         tripsCache.filter(t => t.scheduledDate === selectedDate).forEach(trip => {
             const eid = 'trip_' + trip.id;
-            if (!tripEventIds.has(eid)) {
-                allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, done: false, time: '', date: selectedDate, isTrip: true, tripId: trip.id });
+            if (!tripEventIds.has(eid)) allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, done: false, time: '', date: selectedDate, isTrip: true, tripId: trip.id });
+        });
+
+        if (allEvents.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>'; return; }
+
+        let html = '';
+        allEvents.forEach(e => {
+            if (e.isTrip) {
+                const trip = tripsCache.find(t => t.id === e.tripId);
+                const imgHtml = trip?.image ? `<img src="${trip.image}" style="width:55px;height:55px;object-fit:cover;border-radius:8px;flex-shrink:0;" />` : '';
+                html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}" data-is-trip="true" data-trip-id="${e.tripId||''}">
+                    <div class="checkbox${e.done?' checked':''}"></div>
+                    ${imgHtml}
+                    <div class="event-text" style="flex:1;min-width:0;">
+                        <div style="font-weight:600;">${escapeHtml(trip?.title||'')}</div>
+                        <div style="font-size:12px;color:var(--text-secondary);white-space:pre-wrap;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${escapeHtml(trip?.note||'')}</div>
+                    </div>
+                    <button class="delete-event-btn">✕</button>
+                </div>`;
+            } else {
+                html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}">
+                    <div class="checkbox${e.done?' checked':''}"></div>
+                    <span class="event-text">${escapeHtml(e.title)}</span>
+                    <button class="delete-event-btn">✕</button>
+                </div>`;
             }
         });
 
-        if (allEvents.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>';
-            return;
-        }
-        let html = '';
-        allEvents.forEach(e => {
-            html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}" data-is-trip="${e.isTrip||false}" data-trip-id="${e.tripId||''}"><div class="checkbox${e.done?' checked':''}"></div><span class="event-text">${escapeHtml(e.title)}</span><button class="delete-event-btn">✕</button></div>`;
-        });
         container.innerHTML = `<div class="card">${html}</div>`;
         container.querySelectorAll('.day-event-row').forEach(row => {
             row.querySelector('.checkbox').addEventListener('click', async (e) => {
                 e.stopPropagation();
                 const eventId = row.dataset.eventId;
                 const evData = (eventsCache[selectedDate] || []).find(e => e.eventId === eventId);
-                if (evData) {
-                    evData.done = !evData.done;
-                    await saveEvent(selectedDate, eventId, evData);
-                } else {
-                    await saveEvent(selectedDate, eventId, { eventId, title: row.querySelector('.event-text').textContent, time: '', date: selectedDate, done: true });
-                }
+                if (evData) { evData.done = !evData.done; await saveEvent(selectedDate, eventId, evData); }
+                else { await saveEvent(selectedDate, eventId, { eventId, title: row.querySelector('.event-text')?.textContent || row.querySelector('span')?.textContent || '', time: '', date: selectedDate, done: true }); }
             });
             row.querySelector('.delete-event-btn').addEventListener('click', async (e) => {
                 e.stopPropagation();
@@ -932,6 +935,25 @@
         document.getElementById('modal-storage').style.display = 'flex';
     }
 
+    function renderKeyEventsModal() {
+        const listContainer = document.getElementById('key-events-list');
+        const keyEvents = [];
+        for (const [date, events] of Object.entries(eventsCache)) {
+            events.forEach(e => { if (e.isKey) keyEvents.push({ date, ...e }); });
+        }
+        keyEvents.sort((a,b) => a.date.localeCompare(b.date));
+        if (keyEvents.length === 0) {
+            listContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">🔑</div><p>Нет ключевых событий</p></div>';
+            return;
+        }
+        listContainer.innerHTML = keyEvents.map(e => `
+            <div class="key-event-list-item">
+                <div style="font-weight:600;">${new Date(e.date).toLocaleDateString('ru-RU', { day:'numeric', month:'long' })}</div>
+                <div>${escapeHtml(e.title)}</div>
+            </div>
+        `).join('');
+    }
+
     function switchTab(tab) {
         currentTab = tab;
         document.querySelectorAll('#app > div[id^="tab-"]').forEach(el => el.style.display = 'none');
@@ -960,6 +982,7 @@
     document.getElementById('add-event-fab').addEventListener('click', () => {
         document.getElementById('event-date-input').value = selectedDate;
         document.getElementById('event-title-input').value = '';
+        document.getElementById('event-key-checkbox').checked = false;
         document.getElementById('modal-event').style.display = 'flex';
     });
     document.getElementById('cancel-event-btn').addEventListener('click', () => document.getElementById('modal-event').style.display = 'none');
@@ -967,8 +990,9 @@
         const title = document.getElementById('event-title-input').value.trim();
         const date = document.getElementById('event-date-input').value;
         if (!title || !date) return;
+        const isKey = document.getElementById('event-key-checkbox').checked;
         const eventId = generateId();
-        await saveEvent(date, eventId, { eventId, title, time: '', date, done: false, order: 0 });
+        await saveEvent(date, eventId, { eventId, title, time: '', date, done: false, order: 0, isKey });
         document.getElementById('modal-event').style.display = 'none';
         if (currentView === 'month') renderCalendar(); else renderWeekView();
         if (currentView === 'month' && date === selectedDate) renderDayEvents();
@@ -991,37 +1015,16 @@
         if (imageInput.files[0]) {
             this.disabled = true;
             document.getElementById('trip-loading').style.display = 'block';
-            try {
-                image = await compressImage(imageInput.files[0]);
-            } catch(e) {
-                alert('Ошибка загрузки фото. Попробуйте ещё раз.');
-                this.disabled = false;
-                document.getElementById('trip-loading').style.display = 'none';
-                return;
-            }
+            try { image = await compressImage(imageInput.files[0]); }
+            catch(e) { alert('Ошибка загрузки фото. Попробуйте ещё раз.'); this.disabled = false; document.getElementById('trip-loading').style.display = 'none'; return; }
             this.disabled = false;
             document.getElementById('trip-loading').style.display = 'none';
         }
 
-        const tripData = {
-            id: editingTripId || null,
-            title,
-            note,
-            order: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.order || tripsCache.length) : tripsCache.length,
-            scheduledDate: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.scheduledDate || null) : null,
-            image,
-            _local: true
-        };
+        const tripData = { id: editingTripId || null, title, note, order: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.order || tripsCache.length) : tripsCache.length, scheduledDate: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.scheduledDate || null) : null, image, _local: true };
         this.disabled = true;
-        try {
-            await saveTrip(tripData);
-            document.getElementById('modal-trip').style.display = 'none';
-            editingTripId = null;
-        } catch(e) {
-            // ошибка уже показана в saveTrip
-        } finally {
-            this.disabled = false;
-        }
+        try { await saveTrip(tripData); document.getElementById('modal-trip').style.display = 'none'; editingTripId = null; }
+        catch(e) {} finally { this.disabled = false; }
     });
 
     document.getElementById('cancel-move-btn').addEventListener('click', () => { document.getElementById('modal-move-trip').style.display = 'none'; moveTripId = null; });
@@ -1033,15 +1036,9 @@
             const oldDate = trip.scheduledDate;
             trip.scheduledDate = date;
             await saveTrip(trip);
-            if (oldDate && oldDate !== date) {
-                await deleteEvent(oldDate, 'trip_' + moveTripId);
-            }
+            if (oldDate && oldDate !== date) await deleteEvent(oldDate, 'trip_' + moveTripId);
             await saveEvent(date, 'trip_' + moveTripId, { eventId: 'trip_' + moveTripId, title: '🗺️ ' + trip.title, time: '', date, done: false, order: 0 });
-            switchTab('calendar');
-            selectedDate = date;
-            calendarYear = new Date(date).getFullYear();
-            calendarMonth = new Date(date).getMonth() + 1;
-            weekStart = getMonday(new Date(date));
+            switchTab('calendar'); selectedDate = date; calendarYear = new Date(date).getFullYear(); calendarMonth = new Date(date).getMonth() + 1; weekStart = getMonday(new Date(date));
             if (currentView === 'month') { renderCalendar(); renderDayEvents(); } else renderWeekView();
         }
         document.getElementById('modal-move-trip').style.display = 'none'; moveTripId = null;
@@ -1058,41 +1055,25 @@
         if (filesInput.files.length > 0) {
             this.disabled = true;
             document.getElementById('storage-loading').style.display = 'block';
-            try {
-                for (const file of filesInput.files) {
-                    let data;
-                    if (file.type.startsWith('image/')) {
-                        data = await compressImage(file);
-                    } else {
-                        data = await fileToBase64(file);
-                    }
-                    const type = file.type.includes('pdf') ? 'pdf' : 'image';
-                    files.push({ name: file.name, type, data });
-                }
-            } catch(e) {
-                alert('Ошибка загрузки файлов. Попробуйте ещё раз.');
-                this.disabled = false;
-                document.getElementById('storage-loading').style.display = 'none';
-                return;
-            }
+            try { for (const file of filesInput.files) { const data = file.type.startsWith('image/') ? await compressImage(file) : await fileToBase64(file); files.push({ name: file.name, type: file.type.includes('pdf') ? 'pdf' : 'image', data }); } }
+            catch(e) { alert('Ошибка загрузки файлов. Попробуйте ещё раз.'); this.disabled = false; document.getElementById('storage-loading').style.display = 'none'; return; }
             this.disabled = false;
             document.getElementById('storage-loading').style.display = 'none';
         }
 
         const item = { id: editingStorageId || null, title, files, _local: true };
         this.disabled = true;
-        try {
-            await saveStorageItem(item);
-            document.getElementById('modal-storage').style.display = 'none';
-            editingStorageId = null;
-        } catch(e) {
-            // ошибка показана в saveStorageItem
-        } finally {
-            this.disabled = false;
-        }
+        try { await saveStorageItem(item); document.getElementById('modal-storage').style.display = 'none'; editingStorageId = null; }
+        catch(e) {} finally { this.disabled = false; }
     });
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; }); });
+
+    // Кнопка ключевых событий
+    document.getElementById('key-events-btn').addEventListener('click', () => {
+        renderKeyEventsModal();
+        document.getElementById('modal-key-events').style.display = 'flex';
+    });
 
     const themeToggle = document.getElementById('theme-toggle');
     if (localStorage.getItem('china-trip-theme') === 'dark') { document.body.classList.add('dark'); themeToggle.textContent = '🌙'; }
