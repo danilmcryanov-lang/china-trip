@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>China Trip Planner</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23e63946'/%3E%3Ctext x='256' y='360' text-anchor='middle' font-size='320'%3E🇨🇳%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23e63946'/%3E%3Ctext x='256' y='360' text-anchor='middle' font-size='320'%3E🇨🇳%3C/text%3E%3C/svg%3E">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="China Trip">
+    <meta name="theme-color" content="#e63946">
     <script type="importmap">
         { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js", "firebase/firestore": "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js" } }
     </script>
@@ -29,7 +35,6 @@
             --radius: 14px;
             --radius-sm: 10px;
             --radius-xs: 8px;
-            --cloud-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Cpath d='M10 60 Q25 35 45 45 Q55 25 75 35 Q90 20 105 40 Q120 35 115 55 Q120 70 100 70 L15 70 Q0 70 10 60Z' fill='%23e63946' opacity='0.03'/%3E%3C/svg%3E");
         }
         body.dark {
             --bg: #1a1515;
@@ -46,7 +51,6 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
             --shadow: 0 2px 8px rgba(0,0,0,0.4);
             --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
-            --cloud-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Cpath d='M10 60 Q25 35 45 45 Q55 25 75 35 Q90 20 105 40 Q120 35 115 55 Q120 70 100 70 L15 70 Q0 70 10 60Z' fill='%23c62828' opacity='0.04'/%3E%3C/svg%3E");
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -54,9 +58,6 @@
             background: var(--bg); color: var(--text);
             -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; overflow-x: hidden;
-            background-image: var(--cloud-pattern);
-            background-repeat: repeat;
-            background-size: 120px 80px;
         }
         .app { max-width: 500px; margin: 0 auto; padding: 0 16px 90px; min-height: 100vh; position: relative; }
         .header {
@@ -207,29 +208,31 @@
         .calendar-day .dots { display: flex; gap: 2px; margin-top: 1px; flex-wrap: wrap; justify-content: center; }
         .calendar-day .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
-        /* Неделя */
+        /* Неделя - УВЕЛИЧЕННАЯ ВЫСОТА */
         .week-view { display: none; }
         .week-view.active { display: block; }
+        .week-scroll { max-height: calc(100vh - 250px); overflow-y: auto; }
         .week-row {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
-            min-height: 90px; border-bottom: 1px solid var(--border); padding: 4px 0;
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+            min-height: 150px; border-bottom: 1px solid var(--border); padding: 6px 0;
         }
         .week-day {
-            padding: 3px; border-radius: var(--radius-xs); cursor: pointer;
-            transition: all 0.15s; overflow: hidden; font-size: 11px;
-            border: 2px solid transparent; min-height: 75px;
+            padding: 6px 4px; border-radius: var(--radius-xs); cursor: pointer;
+            transition: all 0.15s; overflow-y: auto; font-size: 11px;
+            border: 2px solid transparent; min-height: 140px;
+            display: flex; flex-direction: column;
         }
         .week-day:hover { background: var(--bg); }
         .week-day.today { border-color: var(--primary); }
         .week-day.selected { background: var(--primary); color: white; }
         .week-day.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
-        .week-day .week-date { font-weight: 700; margin-bottom: 2px; font-size: 12px; }
+        .week-day .week-date { font-weight: 700; margin-bottom: 4px; font-size: 13px; flex-shrink: 0; }
         .week-day .week-event {
-            font-size: 10px; padding: 1px 3px; border-radius: 3px;
-            margin-bottom: 1px; white-space: nowrap; overflow: hidden;
-            text-overflow: ellipsis; cursor: pointer; line-height: 1.3;
+            font-size: 10px; padding: 2px 5px; border-radius: 4px;
+            margin-bottom: 2px; white-space: normal; word-break: break-word;
+            cursor: pointer; line-height: 1.3; flex-shrink: 0;
         }
-        .week-day .week-event-more { font-size: 9px; color: var(--text-secondary); cursor: pointer; }
+        .week-day .week-event-more { font-size: 9px; color: var(--text-secondary); cursor: pointer; margin-top: 2px; }
 
         /* Чек-листы */
         .progress-bar { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
@@ -338,12 +341,36 @@
         .event-detail-card .event-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
         .event-detail-card .event-date { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
 
+        /* Просмотр файлов */
+        .file-viewer-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); z-index: 300; display: flex;
+            flex-direction: column;
+        }
+        .file-viewer-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; color: white; flex-shrink: 0;
+        }
+        .file-viewer-header button {
+            background: rgba(255,255,255,0.2); border: none; color: white;
+            padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;
+        }
+        .file-viewer-content {
+            flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center;
+        }
+        .file-viewer-content img {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+        }
+        .file-viewer-content iframe {
+            width: 100%; height: 100%; border: none;
+        }
+
         @media (max-width: 380px) {
             .calendar-day { font-size: 11px; min-height: 30px; }
             .nav-item { padding: 4px 6px; font-size: 9px; }
             .nav-item svg { width: 18px; height: 18px; }
-            .week-day { font-size: 10px; min-height: 60px; }
-            .week-day .week-event { font-size: 9px; }
+            .week-day { font-size: 10px; min-height: 110px; }
+            .week-day .week-event { font-size: 9px; padding: 1px 3px; }
             .trip-card-preview img { width: 65px; height: 65px; }
         }
     </style>
@@ -367,7 +394,7 @@
     <!-- Вкладка 1: Календарь -->
     <div id="tab-calendar" style="display:none;">
         <div class="view-toggle">
-            <button class="active" data-view="month">📅 Месяц</button>
+            <button class="active" data-view="month">🗓️ Месяц</button>
             <button data-view="week">📋 Неделя</button>
         </div>
         <div id="view-month">
@@ -384,7 +411,9 @@
                 <h3 id="week-label"></h3>
                 <button id="week-next">▶</button>
             </div>
-            <div class="week-row" id="week-grid"></div>
+            <div class="week-scroll">
+                <div class="week-row" id="week-grid"></div>
+            </div>
         </div>
         <div class="section-title">📌 События на <span id="selected-date-label"></span></div>
         <div id="day-events"></div>
@@ -443,6 +472,15 @@
             Файлы
         </button>
     </div>
+</div>
+
+<!-- Просмотр файлов -->
+<div class="file-viewer-overlay" id="file-viewer" style="display:none;">
+    <div class="file-viewer-header">
+        <span id="file-viewer-name" style="font-weight:600;"></span>
+        <button id="file-viewer-close">✕ Закрыть</button>
+    </div>
+    <div class="file-viewer-content" id="file-viewer-content"></div>
 </div>
 
 <!-- Модальное окно: Детали события -->
@@ -521,422 +559,191 @@
         </div>
     </div>
 </div>
-<script type="module">
-    import { initializeApp } from 'firebase/app';
-    import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDs9x4II0rtf43QXZGLAAQ7RT5eLCdefJU",
-        authDomain: "china-trip-planner-8067a.firebaseapp.com",
-        projectId: "china-trip-planner-8067a",
-        storageBucket: "china-trip-planner-8067a.firebasestorage.app",
-        messagingSenderId: "337472987902",
-        appId: "1:337472987902:web:1c17e1696ccfcb2019bbaf"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // ============ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ============
-    let currentTab = 'calendar';
-    let selectedDate = new Date().toISOString().slice(0,10);
-    let calendarYear = new Date().getFullYear();
-    let calendarMonth = new Date().getMonth() + 1;
-    let weekStart = getMonday(new Date());
-    let currentView = 'month';
-    let editingEventId = null;
-    let editingTripId = null;
-    let editingStorageId = null;
-    let moveTripId = null;
-    let eventColor = '#e63946';
-    let detailEventData = null;
-
-    const TRIP_START = '2026-07-07';
-    const TRIP_END = '2026-08-09';
-
-    const colors = ['#e63946','#f0c040','#2a9d8f','#e76f51','#264653','#8ecae6','#ffb703','#8338ec'];
-    const colorNames = ['Красный','Золотой','Зелёный','Оранжевый','Тёмный','Голубой','Янтарный','Фиолетовый'];
-
-    function getMonday(d) { const date = new Date(d); const day = date.getDay(); const diff = day === 0 ? -6 : 1 - day; date.setDate(date.getDate() + diff); date.setHours(0,0,0,0); return date; }
-    function formatDateISO(d) { return d.toISOString().slice(0,10); }
-    function isInTripRange(dateStr) { return dateStr >= TRIP_START && dateStr <= TRIP_END; }
-
-    // ============ КЭШ ДАННЫХ ============
-    let eventsCache = {};
-    let checklistDanil = [];
-    let checklistNastya = [];
-    let tripsCache = [];
-    let storageCache = [];
-
-    // ============ FIREBASE ФУНКЦИИ ============
-    async function saveEvent(date, eventId, data) { await setDoc(doc(db, 'events', date + '_' + eventId), { date, ...data }); }
-    async function deleteEvent(date, eventId) { await deleteDoc(doc(db, 'events', date + '_' + eventId)); }
-    async function saveChecklistItem(user, item) { await setDoc(doc(db, 'checklist', user + '_' + item.id), { user, ...item }); }
-    async function deleteChecklistItem(user, itemId) { await deleteDoc(doc(db, 'checklist', user + '_' + itemId)); }
-    async function saveTrip(trip) {
-        if (trip.id) await setDoc(doc(db, 'trips', trip.id), trip);
-        else { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
-    }
-    async function deleteTrip(tripId) { await deleteDoc(doc(db, 'trips', tripId)); }
-    async function saveStorageItem(item) {
-        if (item.id) await setDoc(doc(db, 'storage', item.id), item);
-        else { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
-    }
-    async function deleteStorageItem(itemId) { await deleteDoc(doc(db, 'storage', itemId)); }
-
-    // ============ ON SNAPSHOT ============
-    function subscribeAll() {
-        onSnapshot(collection(db, 'events'), (snap) => {
-            eventsCache = {};
-            snap.forEach(d => { const data = d.data(); if (!eventsCache[data.date]) eventsCache[data.date] = []; eventsCache[data.date].push(data); });
-            if (currentTab === 'calendar') { if (currentView === 'month') renderCalendar(); else renderWeekView(); renderDayEvents(); }
-        });
-        onSnapshot(collection(db, 'checklist'), (snap) => {
-            checklistDanil = []; checklistNastya = [];
-            snap.forEach(d => {
-                const data = d.data();
-                if (data.user === 'danil') checklistDanil.push(data);
-                else if (data.user === 'nastya') checklistNastya.push(data);
-            });
-            checklistDanil.sort((a,b) => (a.order||0) - (b.order||0));
-            checklistNastya.sort((a,b) => (a.order||0) - (b.order||0));
-            if (currentTab === 'checklist') renderChecklists();
-        });
-        onSnapshot(collection(db, 'trips'), (snap) => {
-            tripsCache = [];
-            snap.forEach(d => tripsCache.push({ id: d.id, ...d.data() }));
-            tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
-            if (currentTab === 'trips') renderTrips();
-        });
-        onSnapshot(collection(db, 'storage'), (snap) => {
-            storageCache = [];
-            snap.forEach(d => storageCache.push({ id: d.id, ...d.data() }));
-            if (currentTab === 'storage') renderStorage();
-        });
-    }
-
-    // ============ РЕНДЕР КАЛЕНДАРЯ (МЕСЯЦ) ============
-    function renderCalendar() {
-        const grid = document.getElementById('calendar-grid');
-        const label = document.getElementById('cal-month-label');
-        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-        label.textContent = `${months[calendarMonth-1]} ${calendarYear}`;
-        grid.innerHTML = '';
-        const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-        dayNames.forEach(d => { const div = document.createElement('div'); div.className = 'calendar-day-name'; div.textContent = d; grid.appendChild(div); });
-        const firstDay = new Date(calendarYear, calendarMonth-1, 1).getDay();
-        const daysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
-        const startDow = firstDay === 0 ? 6 : firstDay - 1;
-        for (let i = 0; i < startDow; i++) { const div = document.createElement('div'); div.className = 'calendar-day other-month'; grid.appendChild(div); }
-        const todayStr = new Date().toISOString().slice(0,10);
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateStr = `${calendarYear}-${String(calendarMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const div = document.createElement('div');
-            div.className = 'calendar-day';
-            if (dateStr === todayStr) div.classList.add('today');
-            if (dateStr === selectedDate) div.classList.add('selected');
-            if (isInTripRange(dateStr)) div.classList.add('trip-range');
-            div.textContent = d;
-            const dayEvents = eventsCache[dateStr] || [];
-            if (dayEvents.length > 0) {
-                const dots = document.createElement('div'); dots.className = 'dots';
-                dayEvents.forEach(e => { const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = e.color || '#e63946'; dots.appendChild(dot); });
-                div.appendChild(dots);
-            }
-            div.addEventListener('click', () => { selectedDate = dateStr; renderCalendar(); renderDayEvents(); });
-            grid.appendChild(div);
-        }
-    }
-
-    // ============ РЕНДЕР НЕДЕЛИ ============
-    function renderWeekView() {
-        const grid = document.getElementById('week-grid');
-        const label = document.getElementById('week-label');
-        const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 6);
-        const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-        label.textContent = `${weekStart.getDate()} ${months[weekStart.getMonth()]} – ${weekEnd.getDate()} ${months[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
-        grid.innerHTML = '';
-        const todayStr = new Date().toISOString().slice(0,10);
-        for (let i = 0; i < 7; i++) {
-            const day = new Date(weekStart); day.setDate(day.getDate() + i);
-            const dateStr = formatDateISO(day);
-            const div = document.createElement('div');
-            div.className = 'week-day';
-            if (dateStr === todayStr) div.classList.add('today');
-            if (dateStr === selectedDate) div.classList.add('selected');
-            if (isInTripRange(dateStr)) div.classList.add('trip-range');
-            const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-            div.innerHTML = `<div class="week-date">${dayNames[i]} ${day.getDate()}</div>`;
-            const dayEvents = eventsCache[dateStr] || [];
-            const maxShow = 3;
-            dayEvents.slice(0, maxShow).forEach(e => {
-                const eventEl = document.createElement('div');
-                eventEl.className = 'week-event';
-                eventEl.style.background = e.color || '#e63946';
-                eventEl.style.color = 'white';
-                eventEl.textContent = e.title;
-                eventEl.addEventListener('click', (ev) => { ev.stopPropagation(); showEventDetail(e, dateStr); });
-                div.appendChild(eventEl);
-            });
-            if (dayEvents.length > maxShow) {
-                const moreEl = document.createElement('div');
-                moreEl.className = 'week-event-more';
-                moreEl.textContent = `+ ещё ${dayEvents.length - maxShow}`;
-                div.appendChild(moreEl);
-            }
-            div.addEventListener('click', () => { selectedDate = dateStr; renderWeekView(); renderDayEvents(); });
-            grid.appendChild(div);
-        }
-    }
-
-    // ============ СОБЫТИЯ ДНЯ ============
-    function renderDayEvents() {
-        const container = document.getElementById('day-events');
-        const label = document.getElementById('selected-date-label');
-        label.textContent = new Date(selectedDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-        const dayEvents = eventsCache[selectedDate] || [];
-        if (dayEvents.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>';
-            return;
-        }
-        container.innerHTML = dayEvents.map(e => `
-            <div class="card" style="cursor:pointer;" data-event-id="${e.eventId}">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <span class="dot" style="width:12px;height:12px;background:${e.color||'#e63946'};border-radius:50%;flex-shrink:0;"></span>
-                    <span style="flex:1;font-weight:500;">${escapeHtml(e.title)}</span>
-                    <span style="color:var(--text-secondary);font-size:12px;">${e.time || ''}</span>
-                </div>
+<body>
+<div class="app" id="app">
+    <div class="header">
+        <div class="header-left">
+            <span class="header-flag">🇨🇳</span>
+            <div class="header-text">
+                <h1>China Trip</h1>
+                <span class="subtitle">旅行 · путешествие</span>
             </div>
-        `).join('');
-        container.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('click', () => {
-                const eventId = card.dataset.eventId;
-                const ev = dayEvents.find(e => e.eventId === eventId);
-                if (ev) showEventDetail(ev, selectedDate);
-            });
-        });
-    }
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="notify-toggle" title="Уведомления">🔔</button>
+            <button class="icon-btn" id="theme-toggle" title="Тема">🌓</button>
+        </div>
+    </div>
 
-    function showEventDetail(eventData, dateStr) {
-        detailEventData = { ...eventData, date: dateStr };
-        document.getElementById('event-detail-dot').style.background = eventData.color || '#e63946';
-        document.getElementById('event-detail-title').textContent = eventData.title;
-        document.getElementById('event-detail-date').textContent = new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-        document.getElementById('modal-event-detail').style.display = 'flex';
-    }
-
-    function openEventModal(eventData = null) {
-        editingEventId = eventData ? eventData.eventId : null;
-        document.getElementById('modal-event-title').textContent = eventData ? 'Редактировать событие' : 'Добавить событие';
-        document.getElementById('event-title-input').value = eventData ? eventData.title : '';
-        eventColor = eventData ? (eventData.color || '#e63946') : '#e63946';
-        renderColorPicker();
-        document.getElementById('modal-event').style.display = 'flex';
-    }
-
-    function renderColorPicker() {
-        const picker = document.getElementById('event-color-picker');
-        picker.innerHTML = colors.map((c,i) => `<span class="color-dot${c===eventColor?' selected':''}" style="background:${c};" data-color="${c}" title="${colorNames[i]}"></span>`).join('');
-        picker.querySelectorAll('.color-dot').forEach(dot => {
-            dot.addEventListener('click', () => { eventColor = dot.dataset.color; renderColorPicker(); });
-        });
-    }
-
-    // ============ ЧЕК-ЛИСТЫ ============
-    function renderChecklists() {
-        renderChecklistGroup('danil', checklistDanil);
-        renderChecklistGroup('nastya', checklistNastya);
-    }
-    function renderChecklistGroup(user, items) {
-        const container = document.getElementById(`checklist-${user}`);
-        const doneCount = items.filter(i => i.done).length;
-        const total = items.length;
-        const percent = total > 0 ? Math.round((doneCount/total)*100) : 0;
-        document.getElementById(`${user}-progress`).textContent = `${doneCount}/${total}`;
-        document.getElementById(`${user}-bar`).style.width = percent + '%';
-        container.innerHTML = items.map((item) => `
-            <div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}">
-                <div class="checkbox"></div>
-                <span class="item-text">${escapeHtml(item.text)}</span>
-                <button class="delete-item">✕</button>
+    <!-- Вкладка 1: Календарь -->
+    <div id="tab-calendar" style="display:none;">
+        <div class="view-toggle">
+            <button class="active" data-view="month">🗓️ Месяц</button>
+            <button data-view="week">📋 Неделя</button>
+        </div>
+        <div id="view-month">
+            <div class="calendar-nav">
+                <button id="cal-prev">◀</button>
+                <h3 id="cal-month-label"></h3>
+                <button id="cal-next">▶</button>
             </div>
-        `).join('');
-        container.querySelectorAll('.checklist-item').forEach(el => {
-            el.querySelector('.checkbox').addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const id = el.dataset.id; const u = el.dataset.user;
-                const list = u === 'danil' ? checklistDanil : checklistNastya;
-                const item = list.find(i => i.id === id);
-                if (item) { item.done = !item.done; await saveChecklistItem(u, item); }
-            });
-            el.querySelector('.delete-item').addEventListener('click', async (e) => {
-                e.stopPropagation();
-                await deleteChecklistItem(el.dataset.user, el.dataset.id);
-            });
-        });
-    }
-
-    // ============ ПОЕЗДКИ ============
-    function renderTrips() {
-        const container = document.getElementById('trips-list');
-        if (tripsCache.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🗺️</div><p>Нет вариантов поездок</p></div>';
-            return;
-        }
-        container.innerHTML = tripsCache.map(trip => `
-            <div class="trip-card" data-id="${trip.id}">
-                <div class="trip-card-preview">
-                    ${trip.image ? `<img src="${trip.image}" alt="${escapeHtml(trip.title)}" />` : `<div style="width:90px;height:90px;background:var(--border);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;">🗺️</div>`}
-                    <div class="preview-info">
-                        <div class="preview-title">
-                            ${escapeHtml(trip.title)}
-                            ${trip.scheduledDate ? `<span class="tag green">📅 ${new Date(trip.scheduledDate).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</span>` : ''}
-                        </div>
-                        ${trip.note ? `<div class="preview-note">${escapeHtml(trip.note)}</div>` : ''}
-                    </div>
-                    <span class="expand-icon">▶</span>
-                </div>
-                <div class="trip-card-body">
-                    ${trip.image ? `<img src="${trip.image}" alt="${escapeHtml(trip.title)}" />` : ''}
-                    ${trip.note ? `<div class="note">${escapeHtml(trip.note)}</div>` : ''}
-                    <div class="trip-card-actions">
-                        <button class="btn outline move-trip-btn">📅 Переместить</button>
-                        <button class="btn outline edit-trip-btn">✏️ Изменить</button>
-                        <button class="btn danger delete-trip-btn">🗑️ Удалить</button>
-                    </div>
-                </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+        <div id="view-week" class="week-view">
+            <div class="calendar-nav">
+                <button id="week-prev">◀</button>
+                <h3 id="week-label"></h3>
+                <button id="week-next">▶</button>
             </div>
-        `).join('');
-        container.querySelectorAll('.trip-card-preview').forEach(preview => {
-            preview.addEventListener('click', () => { preview.parentElement.classList.toggle('expanded'); });
-        });
-        container.querySelectorAll('.move-trip-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                moveTripId = btn.closest('.trip-card').dataset.id;
-                document.getElementById('move-trip-date').value = '';
-                document.getElementById('modal-move-trip').style.display = 'flex';
-            });
-        });
-        container.querySelectorAll('.edit-trip-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const trip = tripsCache.find(t => t.id === btn.closest('.trip-card').dataset.id);
-                if (trip) openTripModal(trip);
-            });
-        });
-        container.querySelectorAll('.delete-trip-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                if (confirm('Удалить поездку?')) await deleteTrip(btn.closest('.trip-card').dataset.id);
-            });
-        });
-    }
-
-    function openTripModal(tripData = null) {
-        editingTripId = tripData ? tripData.id : null;
-        document.getElementById('modal-trip-title').textContent = tripData ? 'Редактировать поездку' : 'Добавить поездку';
-        document.getElementById('trip-title-input').value = tripData ? tripData.title : '';
-        document.getElementById('trip-note-input').value = tripData ? (tripData.note || '') : '';
-        document.getElementById('trip-image-input').value = '';
-        document.getElementById('trip-image-preview').innerHTML = tripData && tripData.image ? `<img src="${tripData.image}" style="width:100%;max-height:150px;object-fit:cover;border-radius:8px;" />` : '';
-        document.getElementById('modal-trip').style.display = 'flex';
-    }
-
-    // ============ ХРАНИЛИЩЕ ============
-    function renderStorage() {
-        const container = document.getElementById('storage-list');
-        if (storageCache.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Нет файлов</p></div>';
-            return;
-        }
-        container.innerHTML = storageCache.map(item => `
-            <div class="storage-card" data-id="${item.id}">
-                <div class="storage-card-header">
-                    <span class="storage-card-title">📁 ${escapeHtml(item.title)}</span>
-                    <div style="display:flex;gap:4px;">
-                        <button class="btn xsmall outline edit-storage-btn">✏️</button>
-                        <button class="btn xsmall danger delete-storage-btn">🗑️</button>
-                    </div>
-                </div>
-                <div class="file-list">
-                    ${(item.files||[]).map((f,i) => `
-                        <span class="file-chip" data-index="${i}">
-                            <span class="file-icon">${f.type === 'pdf' ? '📄' : '🖼️'}</span>
-                            <span class="file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
-                        </span>
-                    `).join('')}
-                </div>
+            <div class="week-scroll">
+                <div class="week-row" id="week-grid"></div>
             </div>
-        `).join('');
-        container.querySelectorAll('.edit-storage-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = storageCache.find(s => s.id === btn.closest('.storage-card').dataset.id);
-                if (item) openStorageModal(item);
-            });
-        });
-        container.querySelectorAll('.delete-storage-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (confirm('Удалить?')) await deleteStorageItem(btn.closest('.storage-card').dataset.id);
-            });
-        });
-        container.querySelectorAll('.file-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                const id = chip.closest('.storage-card').dataset.id;
-                const idx = parseInt(chip.dataset.index);
-                const item = storageCache.find(s => s.id === id);
-                if (item && item.files && item.files[idx]) {
-                    const file = item.files[idx];
-                    if (file.type === 'pdf') {
-                        const win = window.open('', '_blank');
-                        win.document.write(`<iframe src="${file.data}" width="100%" height="100%" style="border:none;"></iframe>`);
-                    } else {
-                        const a = document.createElement('a');
-                        a.href = file.data; a.download = file.name; a.click();
-                    }
-                }
-            });
-        });
-    }
+        </div>
+        <div class="section-title">📌 События на <span id="selected-date-label"></span></div>
+        <div id="day-events"></div>
+        <button class="fab" id="add-event-fab">+</button>
+    </div>
 
-    function openStorageModal(itemData = null) {
-        editingStorageId = itemData ? itemData.id : null;
-        document.getElementById('modal-storage-title').textContent = itemData ? 'Редактировать' : 'Добавить файлы';
-        document.getElementById('storage-title-input').value = itemData ? itemData.title : '';
-        document.getElementById('storage-files-input').value = '';
-        document.getElementById('storage-files-preview').textContent = itemData ? `Уже загружено: ${(itemData.files||[]).length} файл(ов)` : '';
-        document.getElementById('modal-storage').style.display = 'flex';
-    }
+    <!-- Вкладка 2: Чек-лист -->
+    <div id="tab-checklist" style="display:none;">
+        <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
+        <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
+        <div id="checklist-danil"></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input type="text" class="input" id="new-item-danil" placeholder="Добавить вещь..." />
+            <button class="btn primary small" id="add-danil-btn">+</button>
+        </div>
 
-    // ============ ВСПОМОГАТЕЛЬНЫЕ ============
-    function escapeHtml(text) {
-        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-        return String(text).replace(/[&<>"']/g, m => map[m]);
-    }
-    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
-    function fileToBase64(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.readAsDataURL(file);
-        });
-    }
-    function switchTab(tab) {
-        currentTab = tab;
-        document.querySelectorAll('#app > div[id^="tab-"]').forEach(el => el.style.display = 'none');
-        document.getElementById('tab-' + tab).style.display = 'block';
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
-        document.querySelectorAll('.fab').forEach(f => f.style.display = 'none');
-        if (tab === 'calendar') {
-            document.getElementById('add-event-fab').style.display = 'flex';
-            if (currentView === 'month') { document.getElementById('view-month').style.display = 'block'; document.getElementById('view-week').classList.remove('active'); renderCalendar(); }
-            else { document.getElementById('view-month').style.display = 'none'; document.getElementById('view-week').classList.add('active'); renderWeekView(); }
-            renderDayEvents();
-        } else if (tab === 'checklist') { renderChecklists(); }
-        else if (tab === 'trips') { document.getElementById('add-trip-fab').style.display = 'flex'; renderTrips(); }
-        else if (tab === 'storage') { document.getElementById('add-storage-fab').style.display = 'flex'; renderStorage(); }
-    }
-      // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
+        <div class="section-title">👤 Анастасия <span class="count" id="nastya-progress"></span></div>
+        <div class="progress-bar"><div class="progress-bar-fill" id="nastya-bar" style="width:0%"></div></div>
+        <div id="checklist-nastya"></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input type="text" class="input" id="new-item-nastya" placeholder="Добавить вещь..." />
+            <button class="btn primary small" id="add-nastya-btn">+</button>
+        </div>
+    </div>
+
+    <!-- Вкладка 3: Поездки -->
+    <div id="tab-trips" style="display:none;">
+        <div class="section-title">🗺️ Варианты поездок</div>
+        <div id="trips-list"></div>
+        <button class="fab" id="add-trip-fab">+</button>
+    </div>
+
+    <!-- Вкладка 4: Хранилище -->
+    <div id="tab-storage" style="display:none;">
+        <div class="section-title">📂 Документы и файлы</div>
+        <div id="storage-list"></div>
+        <button class="fab" id="add-storage-fab">+</button>
+    </div>
+
+    <!-- Навигация -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-tab="calendar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Календарь
+        </button>
+        <button class="nav-item" data-tab="checklist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Чек-лист
+        </button>
+        <button class="nav-item" data-tab="trips">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 00-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 00-8-8z"/></svg>
+            Поездки
+        </button>
+        <button class="nav-item" data-tab="storage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+            Файлы
+        </button>
+    </div>
+</div>
+
+<!-- Просмотр файлов -->
+<div class="file-viewer-overlay" id="file-viewer" style="display:none;">
+    <div class="file-viewer-header">
+        <span id="file-viewer-name" style="font-weight:600;"></span>
+        <button id="file-viewer-close">✕ Закрыть</button>
+    </div>
+    <div class="file-viewer-content" id="file-viewer-content"></div>
+</div>
+
+<!-- Модальное окно: Детали события -->
+<div class="modal-overlay" id="modal-event-detail" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <div class="event-detail-card">
+            <span class="event-dot" id="event-detail-dot"></span>
+            <div class="event-title" id="event-detail-title"></div>
+            <div class="event-date" id="event-detail-date"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <button class="btn secondary full" id="edit-event-from-detail-btn">✏️ Изменить</button>
+            <button class="btn danger full" id="delete-event-from-detail-btn">🗑️ Удалить</button>
+        </div>
+        <button class="btn secondary full" id="close-event-detail-btn" style="margin-top:8px;">Закрыть</button>
+    </div>
+</div>
+
+<!-- Модальное окно: Редактировать событие -->
+<div class="modal-overlay" id="modal-event" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-event-title">Добавить событие</h3>
+        <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin:10px 0;" />
+        <div class="color-options" id="event-color-picker"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-event-btn">Отмена</button>
+            <button class="btn primary full" id="save-event-btn">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Добавить карточку поездки -->
+<div class="modal-overlay" id="modal-trip" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-trip-title">Добавить поездку</h3>
+        <input type="text" class="input" id="trip-title-input" placeholder="Название (Диснейленд, Великая стена...)" style="margin:10px 0;" />
+        <textarea class="input" id="trip-note-input" placeholder="Заметка (стоимость, что взять...)" style="margin-bottom:10px;"></textarea>
+        <label style="font-size:12px;color:var(--text-secondary);">Фото:</label>
+        <input type="file" class="input" id="trip-image-input" accept="image/*" style="margin-bottom:10px;font-size:13px;" />
+        <div id="trip-image-preview" style="margin-bottom:8px;"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-trip-btn">Отмена</button>
+            <button class="btn primary full" id="save-trip-btn">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Перенести поездку на дату -->
+<div class="modal-overlay" id="modal-move-trip" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3>Выберите дату для поездки</h3>
+        <input type="date" class="input" id="move-trip-date" style="margin:14px 0;" />
+        <div style="display:flex;gap:8px;">
+            <button class="btn secondary full" id="cancel-move-btn">Отмена</button>
+            <button class="btn primary full" id="confirm-move-btn">Перенести</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Добавить в хранилище -->
+<div class="modal-overlay" id="modal-storage" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-storage-title">Добавить файлы</h3>
+        <input type="text" class="input" id="storage-title-input" placeholder="Название (Билеты, Страховка...)" style="margin:10px 0;" />
+        <label style="font-size:12px;color:var(--text-secondary);">Файлы (можно несколько):</label>
+        <input type="file" class="input" id="storage-files-input" multiple style="margin-bottom:10px;font-size:13px;" />
+        <div id="storage-files-preview" style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-storage-btn">Отмена</button>
+            <button class="btn primary full" id="save-storage-btn">Сохранить</button>
+        </div>
+    </div>
+</div>
+    // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
     // Навигация
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => switchTab(item.dataset.tab));
@@ -1012,6 +819,7 @@
         await saveEvent(date, eventId, { eventId, title, color: eventColor, time: '', date });
         document.getElementById('modal-event').style.display = 'none';
         editingEventId = null;
+        detailEventData = null;
     });
 
     // Чек-лист
@@ -1122,7 +930,7 @@
                 if (perm === 'granted') {
                     notificationsEnabled = true;
                     notifyToggle.classList.add('notify-active');
-                    new Notification('🇨🇳 China Trip', { body: 'Уведомления включены! Напоминания будут приходить.', icon: '🇨🇳' });
+                    new Notification('🇨🇳 China Trip', { body: 'Уведомления включены!', icon: '🇨🇳' });
                 }
             }
         } else {
@@ -1130,19 +938,13 @@
             notifyToggle.classList.remove('notify-active');
         }
     });
-
-    // Проверка событий для уведомлений (раз в час)
     setInterval(() => {
         if (!notificationsEnabled) return;
         const today = new Date().toISOString().slice(0,10);
         const todayEvents = eventsCache[today] || [];
         const now = new Date();
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-        if (hour === 9 && minute < 5) {
-            if (todayEvents.length > 0) {
-                new Notification('📅 События на сегодня', { body: `У вас ${todayEvents.length} событий: ${todayEvents.map(e=>e.title).join(', ')}`, icon: '🇨🇳' });
-            }
+        if (now.getHours() === 9 && now.getMinutes() < 5 && todayEvents.length > 0) {
+            new Notification('📅 События на сегодня', { body: todayEvents.map(e=>e.title).join(', '), icon: '🇨🇳' });
         }
     }, 300000);
 
@@ -1154,4 +956,4 @@
     init();
 </script>
 </body>
-</html>  
+</html>
