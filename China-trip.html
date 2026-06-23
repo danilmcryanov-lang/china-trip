@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>China Trip Planner</title>
+    <script type="importmap">
+        { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js", "firebase/firestore": "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js" } }
+    </script>
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --border: #e5e5ea;
+            --primary: #007aff;
+            --primary-light: #e8f2ff;
+            --danger: #ff3b30;
+            --success: #34c759;
+            --warning: #ff9500;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --radius-xs: 8px;
+            --nav-height: 70px;
+            --header-height: 52px;
+        }
+        body.dark {
+            --bg: #1c1c1e;
+            --card-bg: #2c2c2e;
+            --text: #f5f5f7;
+            --text-secondary: #98989d;
+            --border: #3a3a3c;
+            --primary: #0a84ff;
+            --primary-light: #1c3a5e;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow: 0 2px 8px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+        .app { max-width: 500px; margin: 0 auto; padding: 0 16px 90px; min-height: 100vh; position: relative; }
+
+        .header {
+            position: sticky; top: 0; z-index: 99;
+            background: var(--bg); padding: 14px 0 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header h1 {
+            font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-actions { display: flex; gap: 4px; align-items: center; }
+        .icon-btn {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: var(--card-bg); color: var(--text); cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-sm); transition: all 0.15s;
+        }
+        .icon-btn:active { transform: scale(0.93); opacity: 0.7; }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 500px; background: var(--card-bg);
+            border-top: 1px solid var(--border); display: flex;
+            justify-content: space-around; padding: 6px 0 10px; z-index: 100;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06); border-radius: 20px 20px 0 0;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 6px 12px; border: none; background: none;
+            color: var(--text-secondary); cursor: pointer; border-radius: 12px;
+            transition: all 0.2s; font-size: 10px; font-weight: 500;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active::before {
+            content: ''; position: absolute; top: -6px; width: 20px; height: 3px;
+            background: var(--primary); border-radius: 2px;
+        }
+        .nav-item { position: relative; }
+        .nav-item svg { width: 22px; height: 22px; }
+
+        .card {
+            background: var(--card-bg); border-radius: var(--radius);
+            padding: 16px; margin-bottom: 10px;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .card:active { transform: scale(0.985); }
+
+        .section-title {
+            font-size: 20px; font-weight: 700; margin: 16px 0 10px;
+            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-title .count {
+            font-size: 13px; font-weight: 500; color: var(--text-secondary);
+            background: var(--border); padding: 2px 8px; border-radius: 10px;
+        }
+
+        .btn {
+            padding: 10px 18px; border-radius: 20px; cursor: pointer;
+            font-size: 14px; font-weight: 600; border: none;
+            transition: all 0.15s; display: inline-flex; align-items: center;
+            gap: 6px; justify-content: center;
+        }
+        .btn.primary { background: var(--primary); color: white; }
+        .btn.primary:active { opacity: 0.8; transform: scale(0.96); }
+        .btn.secondary { background: var(--card-bg); color: var(--primary); border: 1.5px solid var(--primary); }
+        .btn.small { padding: 6px 12px; font-size: 12px; border-radius: 14px; }
+        .btn.xsmall { padding: 4px 10px; font-size: 11px; border-radius: 12px; }
+        .btn.danger { background: #ffe5e5; color: var(--danger); }
+        body.dark .btn.danger { background: #3d1c1c; }
+        .btn.full { width: 100%; }
+
+        .fab {
+            position: fixed; bottom: 100px; right: 20px; width: 52px; height: 52px;
+            border-radius: 50%; background: var(--primary); color: white;
+            border: none; font-size: 26px; cursor: pointer;
+            box-shadow: var(--shadow-lg); z-index: 90;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .fab:active { transform: scale(0.9) rotate(90deg); }
+
+        .input {
+            width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 15px;
+            background: var(--bg); color: var(--text); outline: none;
+            transition: border-color 0.2s; font-family: inherit;
+        }
+        .input:focus { border-color: var(--primary); background: var(--card-bg); }
+        textarea.input { resize: vertical; min-height: 60px; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45); z-index: 200; display: flex;
+            align-items: flex-end; justify-content: center;
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal {
+            background: var(--card-bg); border-radius: 22px 22px 0 0;
+            padding: 20px 16px 30px; width: 100%; max-width: 500px;
+            max-height: 85vh; overflow-y: auto; animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-handle {
+            width: 36px; height: 5px; background: var(--border);
+            border-radius: 3px; margin: 0 auto 16px;
+        }
+
+        /* Календарь */
+        .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .calendar-nav h3 { font-size: 18px; font-weight: 700; }
+        .calendar-nav button {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: var(--card-bg); color: var(--text); cursor: pointer;
+            font-size: 18px; box-shadow: var(--shadow-sm);
+        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day-name { text-align: center; font-size: 11px; color: var(--text-secondary); padding: 6px 0; font-weight: 600; }
+        .calendar-day {
+            aspect-ratio: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; border-radius: var(--radius-xs);
+            cursor: pointer; font-size: 14px; font-weight: 500; position: relative;
+            transition: all 0.15s; border: 2px solid transparent;
+        }
+        .calendar-day:hover { background: var(--primary-light); }
+        .calendar-day.today { border-color: var(--primary); font-weight: 700; }
+        .calendar-day.selected { background: var(--primary); color: white; }
+        .calendar-day.other-month { color: var(--text-secondary); opacity: 0.4; }
+        .calendar-day .dots { display: flex; gap: 2px; margin-top: 2px; }
+        .calendar-day .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+        /* Чек-листы */
+        .checklist-group { margin-bottom: 14px; }
+        .checklist-group-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 6px; font-weight: 700; font-size: 16px;
+        }
+        .progress-bar {
+            height: 5px; background: var(--border); border-radius: 3px;
+            margin-bottom: 8px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: var(--success); border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .progress-text { font-size: 11px; color: var(--text-secondary); }
+        .checklist-item {
+            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+            border-radius: var(--radius-xs); cursor: pointer; transition: all 0.15s;
+            border: 1px solid transparent; margin-bottom: 2px;
+        }
+        .checklist-item:active { background: var(--bg); }
+        .checklist-item .checkbox {
+            width: 22px; height: 22px; border: 2px solid var(--border);
+            border-radius: 6px; flex-shrink: 0; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .checklist-item.done .checkbox {
+            background: var(--success); border-color: var(--success);
+        }
+        .checklist-item.done .checkbox::after {
+            content: '✓'; color: white; font-size: 13px; font-weight: bold;
+        }
+        .checklist-item.done .item-text { text-decoration: line-through; color: var(--text-secondary); }
+        .checklist-item .item-text { flex: 1; font-size: 14px; }
+        .checklist-item .delete-item {
+            opacity: 0; background: none; border: none; color: var(--danger);
+            cursor: pointer; font-size: 16px; padding: 4px; transition: opacity 0.2s;
+        }
+        .checklist-item:hover .delete-item, .checklist-item:active .delete-item { opacity: 1; }
+
+        /* Карточки поездок */
+        .trip-card {
+            background: var(--card-bg); border-radius: var(--radius);
+            overflow: hidden; margin-bottom: 8px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm); transition: all 0.2s;
+        }
+        .trip-card:active { transform: scale(0.985); }
+        .trip-card-header {
+            display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+            cursor: pointer;
+        }
+        .trip-card-header .expand-icon {
+            transition: transform 0.25s; font-size: 12px; color: var(--text-secondary);
+        }
+        .trip-card.expanded .trip-card-header .expand-icon { transform: rotate(90deg); }
+        .trip-card-title { flex: 1; font-weight: 600; font-size: 15px; }
+        .trip-card-body { display: none; padding: 0 14px 14px; }
+        .trip-card.expanded .trip-card-body { display: block; }
+        .trip-card img {
+            width: 100%; max-height: 200px; object-fit: cover;
+            border-radius: var(--radius-xs); margin-bottom: 8px;
+        }
+        .trip-card .note { font-size: 13px; color: var(--text-secondary); white-space: pre-wrap; }
+        .trip-card-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+        /* Хранилище */
+        .storage-card {
+            background: var(--card-bg); border-radius: var(--radius);
+            padding: 14px; margin-bottom: 8px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .storage-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .storage-card-title { font-weight: 600; font-size: 15px; }
+        .file-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .file-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 10px; background: var(--bg); border-radius: 16px;
+            font-size: 12px; cursor: pointer; transition: all 0.15s;
+        }
+        .file-chip:active { background: var(--primary-light); }
+        .file-chip .file-icon { font-size: 16px; }
+        .file-chip .file-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--text-secondary);
+        }
+        .empty-state .empty-icon { font-size: 48px; opacity: 0.3; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+
+        .tag {
+            display: inline-block; padding: 3px 8px; border-radius: 10px;
+            font-size: 11px; font-weight: 600; margin-right: 4px;
+        }
+        .tag.red { background: #ffe5e5; color: #d32f2f; }
+        .tag.blue { background: #e3f2fd; color: #1565c0; }
+        .tag.green { background: #e8f5e9; color: #2e7d32; }
+        .tag.orange { background: #fff3e0; color: #e65100; }
+        .tag.purple { background: #f3e5f5; color: #7b1fa2; }
+        body.dark .tag.red { background: #3d1c1c; color: #ff5252; }
+        body.dark .tag.blue { background: #1a2d40; color: #64b5f6; }
+        body.dark .tag.green { background: #1a3020; color: #69f0ae; }
+        body.dark .tag.orange { background: #352515; color: #ffab40; }
+        body.dark .tag.purple { background: #251a30; color: #ce93d8; }
+
+        .color-options { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+        .color-dot {
+            width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+            border: 2px solid transparent; transition: all 0.15s;
+        }
+        .color-dot.selected { border-color: var(--text); transform: scale(1.15); }
+
+        @media (max-width: 380px) {
+            .calendar-day { font-size: 12px; }
+            .nav-item { padding: 4px 8px; font-size: 9px; }
+            .nav-item svg { width: 20px; height: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+    <div class="header">
+        <h1>🇨🇳 China Trip</h1>
+        <div class="header-actions">
+            <button class="icon-btn" id="theme-toggle" title="Тема">🌓</button>
+        </div>
+    </div>
+
+    <!-- Вкладка 1: Календарь -->
+    <div id="tab-calendar" style="display:none;">
+        <div class="calendar-nav">
+            <button id="cal-prev">◀</button>
+            <h3 id="cal-month-label"></h3>
+            <button id="cal-next">▶</button>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="section-title">📌 События на <span id="selected-date-label"></span></div>
+        <div id="day-events"></div>
+        <button class="fab" id="add-event-fab">+</button>
+    </div>
+
+    <!-- Вкладка 2: Чек-лист вещей -->
+    <div id="tab-checklist" style="display:none;">
+        <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
+        <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
+        <div id="checklist-danil"></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input type="text" class="input" id="new-item-danil" placeholder="Добавить вещь..." />
+            <button class="btn primary small" id="add-danil-btn">+</button>
+        </div>
+
+        <div class="section-title">👤 Анастасия <span class="count" id="nastya-progress"></span></div>
+        <div class="progress-bar"><div class="progress-bar-fill" id="nastya-bar" style="width:0%"></div></div>
+        <div id="checklist-nastya"></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input type="text" class="input" id="new-item-nastya" placeholder="Добавить вещь..." />
+            <button class="btn primary small" id="add-nastya-btn">+</button>
+        </div>
+    </div>
+
+    <!-- Вкладка 3: Чек-лист поездок -->
+    <div id="tab-trips" style="display:none;">
+        <div class="section-title">🗺️ Варианты поездок</div>
+        <div id="trips-list"></div>
+        <button class="fab" id="add-trip-fab">+</button>
+    </div>
+
+    <!-- Вкладка 4: Хранилище -->
+    <div id="tab-storage" style="display:none;">
+        <div class="section-title">📂 Документы и файлы</div>
+        <div id="storage-list"></div>
+        <button class="fab" id="add-storage-fab">+</button>
+    </div>
+
+    <!-- Навигация -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-tab="calendar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Календарь
+        </button>
+        <button class="nav-item" data-tab="checklist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Вещи
+        </button>
+        <button class="nav-item" data-tab="trips">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 00-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 00-8-8z"/></svg>
+            Поездки
+        </button>
+        <button class="nav-item" data-tab="storage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+            Файлы
+        </button>
+    </div>
+</div>
+
+<!-- Модальное окно: Добавить событие в календарь -->
+<div class="modal-overlay" id="modal-event" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-event-title">Добавить событие</h3>
+        <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin:10px 0;" />
+        <div class="color-options" id="event-color-picker"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-event-btn">Отмена</button>
+            <button class="btn primary full" id="save-event-btn">Сохранить</button>
+        </div>
+        <button class="btn danger small full" id="delete-event-btn" style="margin-top:8px;display:none;">Удалить событие</button>
+    </div>
+</div>
+
+<!-- Модальное окно: Добавить карточку поездки -->
+<div class="modal-overlay" id="modal-trip" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-trip-title">Добавить поездку</h3>
+        <input type="text" class="input" id="trip-title-input" placeholder="Название (Диснейленд, Великая стена...)" style="margin:10px 0;" />
+        <textarea class="input" id="trip-note-input" placeholder="Заметка (стоимость, что взять...)" style="margin-bottom:10px;"></textarea>
+        <label style="font-size:12px;color:var(--text-secondary);">Фото:</label>
+        <input type="file" class="input" id="trip-image-input" accept="image/*" style="margin-bottom:10px;font-size:13px;" />
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-trip-btn">Отмена</button>
+            <button class="btn primary full" id="save-trip-btn">Сохранить</button>
+        </div>
+        <button class="btn danger small full" id="delete-trip-btn" style="margin-top:8px;display:none;">Удалить поездку</button>
+    </div>
+</div>
+
+<!-- Модальное окно: Перенести поездку на дату -->
+<div class="modal-overlay" id="modal-move-trip" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3>Выберите дату для поездки</h3>
+        <input type="date" class="input" id="move-trip-date" style="margin:14px 0;" />
+        <div style="display:flex;gap:8px;">
+            <button class="btn secondary full" id="cancel-move-btn">Отмена</button>
+            <button class="btn primary full" id="confirm-move-btn">Перенести</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно: Добавить в хранилище -->
+<div class="modal-overlay" id="modal-storage" style="display:none;">
+    <div class="modal">
+        <div class="modal-handle"></div>
+        <h3 id="modal-storage-title">Добавить файлы</h3>
+        <input type="text" class="input" id="storage-title-input" placeholder="Название (Билеты, Страховка...)" style="margin:10px 0;" />
+        <label style="font-size:12px;color:var(--text-secondary);">Файлы (можно несколько):</label>
+        <input type="file" class="input" id="storage-files-input" multiple style="margin-bottom:10px;font-size:13px;" />
+        <div id="storage-files-preview" style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+            <button class="btn secondary full" id="cancel-storage-btn">Отмена</button>
+            <button class="btn primary full" id="save-storage-btn">Сохранить</button>
+        </div>
+        <button class="btn danger small full" id="delete-storage-btn" style="margin-top:8px;display:none;">Удалить</button>
+    </div>
+</div>
+<script type="module">
+    import { initializeApp } from 'firebase/app';
+    import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDs9x4II0rtf43QXZGLAAQ7RT5eLCdefJU",
+        authDomain: "china-trip-planner-8067a.firebaseapp.com",
+        projectId: "china-trip-planner-8067a",
+        storageBucket: "china-trip-planner-8067a.firebasestorage.app",
+        messagingSenderId: "337472987902",
+        appId: "1:337472987902:web:1c17e1696ccfcb2019bbaf"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ============ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ============
+    let currentTab = 'calendar';
+    let selectedDate = new Date().toISOString().slice(0,10);
+    let calendarYear = new Date().getFullYear();
+    let calendarMonth = new Date().getMonth() + 1;
+    let editingEventId = null;
+    let editingTripId = null;
+    let editingStorageId = null;
+    let moveTripId = null;
+    let eventColor = '#007aff';
+
+    const colors = ['#007aff','#ff9500','#34c759','#ff3b30','#5856d6','#ff2d55','#af52de','#00c7be'];
+    const colorNames = ['Синий','Оранжевый','Зелёный','Красный','Фиолетовый','Розовый','Пурпурный','Бирюзовый'];
+
+    // ============ КЭШ ДАННЫХ ============
+    let eventsCache = {};
+    let checklistDanil = [];
+    let checklistNastya = [];
+    let tripsCache = [];
+    let storageCache = [];
+
+    // ============ ФУНКЦИИ РАБОТЫ С FIREBASE ============
+    async function saveEvent(date, eventId, data) {
+        await setDoc(doc(db, 'events', date + '_' + eventId), { date, ...data });
+    }
+    async function deleteEvent(date, eventId) {
+        await deleteDoc(doc(db, 'events', date + '_' + eventId));
+    }
+    async function saveChecklistItem(user, item) {
+        await setDoc(doc(db, 'checklist', user + '_' + item.id), { user, ...item });
+    }
+    async function deleteChecklistItem(user, itemId) {
+        await deleteDoc(doc(db, 'checklist', user + '_' + itemId));
+    }
+    async function saveTrip(trip) {
+        if (trip.id) await setDoc(doc(db, 'trips', trip.id), trip);
+        else { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
+    }
+    async function deleteTrip(tripId) {
+        await deleteDoc(doc(db, 'trips', tripId));
+    }
+    async function saveStorageItem(item) {
+        if (item.id) await setDoc(doc(db, 'storage', item.id), item);
+        else { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
+    }
+    async function deleteStorageItem(itemId) {
+        await deleteDoc(doc(db, 'storage', itemId));
+    }
+
+    // ============ ON SNAPSHOT ПОДПИСКИ ============
+    function subscribeAll() {
+        onSnapshot(collection(db, 'events'), (snap) => {
+            eventsCache = {};
+            snap.forEach(d => { const data = d.data(); if (!eventsCache[data.date]) eventsCache[data.date] = []; eventsCache[data.date].push(data); });
+            if (currentTab === 'calendar') { renderCalendar(); renderDayEvents(); }
+        });
+
+        onSnapshot(collection(db, 'checklist'), (snap) => {
+            checklistDanil = []; checklistNastya = [];
+            snap.forEach(d => {
+                const data = d.data();
+                if (data.user === 'danil') checklistDanil.push(data);
+                else if (data.user === 'nastya') checklistNastya.push(data);
+            });
+            checklistDanil.sort((a,b) => (a.order||0) - (b.order||0));
+            checklistNastya.sort((a,b) => (a.order||0) - (b.order||0));
+            if (currentTab === 'checklist') renderChecklists();
+        });
+
+        onSnapshot(collection(db, 'trips'), (snap) => {
+            tripsCache = [];
+            snap.forEach(d => tripsCache.push({ id: d.id, ...d.data() }));
+            tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
+            if (currentTab === 'trips') renderTrips();
+        });
+
+        onSnapshot(collection(db, 'storage'), (snap) => {
+            storageCache = [];
+            snap.forEach(d => storageCache.push({ id: d.id, ...d.data() }));
+            if (currentTab === 'storage') renderStorage();
+        });
+    }
+
+    // ============ РЕНДЕР КАЛЕНДАРЯ ============
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        const label = document.getElementById('cal-month-label');
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        label.textContent = `${months[calendarMonth-1]} ${calendarYear}`;
+        grid.innerHTML = '';
+
+        const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        dayNames.forEach(d => { const div = document.createElement('div'); div.className = 'calendar-day-name'; div.textContent = d; grid.appendChild(div); });
+
+        const firstDay = new Date(calendarYear, calendarMonth-1, 1).getDay();
+        const daysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
+        const startDow = firstDay === 0 ? 6 : firstDay - 1;
+
+        for (let i = 0; i < startDow; i++) {
+            const div = document.createElement('div'); div.className = 'calendar-day other-month'; grid.appendChild(div);
+        }
+
+        const todayStr = new Date().toISOString().slice(0,10);
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${calendarYear}-${String(calendarMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const div = document.createElement('div');
+            div.className = 'calendar-day';
+            if (dateStr === todayStr) div.classList.add('today');
+            if (dateStr === selectedDate) div.classList.add('selected');
+            div.textContent = d;
+
+            const dayEvents = eventsCache[dateStr] || [];
+            if (dayEvents.length > 0) {
+                const dots = document.createElement('div'); dots.className = 'dots';
+                dayEvents.forEach(e => { const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = e.color || '#007aff'; dots.appendChild(dot); });
+                div.appendChild(dots);
+            }
+
+            div.addEventListener('click', () => {
+                selectedDate = dateStr;
+                renderCalendar();
+                renderDayEvents();
+            });
+            grid.appendChild(div);
+        }
+    }
+
+    function renderDayEvents() {
+        const container = document.getElementById('day-events');
+        const label = document.getElementById('selected-date-label');
+        label.textContent = new Date(selectedDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        const dayEvents = eventsCache[selectedDate] || [];
+        if (dayEvents.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>';
+            return;
+        }
+        container.innerHTML = dayEvents.map(e => `
+            <div class="card" style="cursor:pointer;" data-event-id="${e.eventId}">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="dot" style="width:12px;height:12px;background:${e.color||'#007aff'};border-radius:50%;flex-shrink:0;"></span>
+                    <span style="flex:1;font-weight:500;">${escapeHtml(e.title)}</span>
+                    <span style="color:var(--text-secondary);font-size:12px;">${e.time || ''}</span>
+                </div>
+            </div>
+        `).join('');
+
+        container.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const eventId = card.dataset.eventId;
+                const ev = dayEvents.find(e => e.eventId === eventId);
+                if (ev) openEventModal(ev);
+            });
+        });
+    }
+
+    function openEventModal(eventData = null) {
+        editingEventId = eventData ? eventData.eventId : null;
+        document.getElementById('modal-event-title').textContent = eventData ? 'Редактировать событие' : 'Добавить событие';
+        document.getElementById('event-title-input').value = eventData ? eventData.title : '';
+        document.getElementById('delete-event-btn').style.display = eventData ? 'block' : 'none';
+        eventColor = eventData ? (eventData.color || '#007aff') : '#007aff';
+        renderColorPicker();
+        document.getElementById('modal-event').style.display = 'flex';
+    }
+
+    function renderColorPicker() {
+        const picker = document.getElementById('event-color-picker');
+        picker.innerHTML = colors.map((c,i) => `<span class="color-dot${c===eventColor?' selected':''}" style="background:${c};" data-color="${c}" title="${colorNames[i]}"></span>`).join('');
+        picker.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', () => { eventColor = dot.dataset.color; renderColorPicker(); });
+        });
+    }
+
+    // ============ РЕНДЕР ЧЕК-ЛИСТОВ ============
+    function renderChecklists() {
+        renderChecklistGroup('danil', checklistDanil);
+        renderChecklistGroup('nastya', checklistNastya);
+    }
+
+    function renderChecklistGroup(user, items) {
+        const container = document.getElementById(`checklist-${user}`);
+        const doneCount = items.filter(i => i.done).length;
+        const total = items.length;
+        const percent = total > 0 ? Math.round((doneCount/total)*100) : 0;
+        document.getElementById(`${user}-progress`).textContent = `${doneCount}/${total}`;
+        document.getElementById(`${user}-bar`).style.width = percent + '%';
+
+        container.innerHTML = items.map((item, idx) => `
+            <div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}">
+                <div class="checkbox"></div>
+                <span class="item-text">${escapeHtml(item.text)}</span>
+                <button class="delete-item">✕</button>
+            </div>
+        `).join('');
+
+        container.querySelectorAll('.checklist-item').forEach(el => {
+            el.querySelector('.checkbox').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const id = el.dataset.id;
+                const u = el.dataset.user;
+                const list = u === 'danil' ? checklistDanil : checklistNastya;
+                const item = list.find(i => i.id === id);
+                if (item) { item.done = !item.done; await saveChecklistItem(u, item); }
+            });
+            el.querySelector('.delete-item').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const id = el.dataset.id;
+                const u = el.dataset.user;
+                await deleteChecklistItem(u, id);
+            });
+        });
+    }
+
+    // ============ РЕНДЕР ПОЕЗДОК ============
+    function renderTrips() {
+        const container = document.getElementById('trips-list');
+        if (tripsCache.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🗺️</div><p>Нет вариантов поездок</p></div>';
+            return;
+        }
+        container.innerHTML = tripsCache.map(trip => `
+            <div class="trip-card" data-id="${trip.id}">
+                <div class="trip-card-header">
+                    <span class="expand-icon">▶</span>
+                    <span class="trip-card-title">${escapeHtml(trip.title)}</span>
+                    ${trip.scheduledDate ? `<span class="tag green">📅 ${new Date(trip.scheduledDate).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</span>` : ''}
+                </div>
+                <div class="trip-card-body">
+                    ${trip.image ? `<img src="${trip.image}" alt="${escapeHtml(trip.title)}" />` : ''}
+                    ${trip.note ? `<div class="note">${escapeHtml(trip.note)}</div>` : ''}
+                    <div class="trip-card-actions">
+                        <button class="btn small primary move-trip-btn">📅 На дату</button>
+                        <button class="btn small edit-trip-btn">✏️</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        container.querySelectorAll('.trip-card-header').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('expanded');
+            });
+        });
+        container.querySelectorAll('.move-trip-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                moveTripId = btn.closest('.trip-card').dataset.id;
+                document.getElementById('move-trip-date').value = '';
+                document.getElementById('modal-move-trip').style.display = 'flex';
+            });
+        });
+        container.querySelectorAll('.edit-trip-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.closest('.trip-card').dataset.id;
+                const trip = tripsCache.find(t => t.id === id);
+                if (trip) openTripModal(trip);
+            });
+        });
+    }
+
+    function openTripModal(tripData = null) {
+        editingTripId = tripData ? tripData.id : null;
+        document.getElementById('modal-trip-title').textContent = tripData ? 'Редактировать поездку' : 'Добавить поездку';
+        document.getElementById('trip-title-input').value = tripData ? tripData.title : '';
+        document.getElementById('trip-note-input').value = tripData ? (tripData.note || '') : '';
+        document.getElementById('trip-image-input').value = '';
+        document.getElementById('delete-trip-btn').style.display = tripData ? 'block' : 'none';
+        document.getElementById('modal-trip').style.display = 'flex';
+    }
+
+    // ============ РЕНДЕР ХРАНИЛИЩА ============
+    function renderStorage() {
+        const container = document.getElementById('storage-list');
+        if (storageCache.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Нет файлов</p></div>';
+            return;
+        }
+        container.innerHTML = storageCache.map(item => `
+            <div class="storage-card" data-id="${item.id}">
+                <div class="storage-card-header">
+                    <span class="storage-card-title">📁 ${escapeHtml(item.title)}</span>
+                    <button class="btn xsmall edit-storage-btn">✏️</button>
+                </div>
+                <div class="file-list">
+                    ${(item.files||[]).map((f,i) => `
+                        <span class="file-chip" data-index="${i}">
+                            <span class="file-icon">${f.type === 'pdf' ? '📄' : '🖼️'}</span>
+                            <span class="file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        container.querySelectorAll('.edit-storage-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.closest('.storage-card').dataset.id;
+                const item = storageCache.find(s => s.id === id);
+                if (item) openStorageModal(item);
+            });
+        });
+
+        container.querySelectorAll('.file-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const id = chip.closest('.storage-card').dataset.id;
+                const idx = parseInt(chip.dataset.index);
+                const item = storageCache.find(s => s.id === id);
+                if (item && item.files && item.files[idx]) {
+                    const file = item.files[idx];
+                    const a = document.createElement('a');
+                    a.href = file.data;
+                    a.download = file.name;
+                    a.click();
+                }
+            });
+        });
+    }
+
+    function openStorageModal(itemData = null) {
+        editingStorageId = itemData ? itemData.id : null;
+        document.getElementById('modal-storage-title').textContent = itemData ? 'Редактировать' : 'Добавить файлы';
+        document.getElementById('storage-title-input').value = itemData ? itemData.title : '';
+        document.getElementById('storage-files-input').value = '';
+        document.getElementById('storage-files-preview').textContent = itemData ? `Уже загружено: ${(itemData.files||[]).length} файл(ов)` : '';
+        document.getElementById('delete-storage-btn').style.display = itemData ? 'block' : 'none';
+        document.getElementById('modal-storage').style.display = 'flex';
+    }
+
+    // ============ ВСПОМОГАТЕЛЬНЫЕ ============
+    function escapeHtml(text) {
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+        return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+
+    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+    function fileToBase64(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('#app > div[id^="tab-"]').forEach(el => el.style.display = 'none');
+        document.getElementById('tab-' + tab).style.display = 'block';
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+        document.querySelectorAll('.fab').forEach(f => f.style.display = 'none');
+
+        if (tab === 'calendar') {
+            document.getElementById('add-event-fab').style.display = 'flex';
+            renderCalendar(); renderDayEvents();
+        } else if (tab === 'checklist') {
+            renderChecklists();
+        } else if (tab === 'trips') {
+            document.getElementById('add-trip-fab').style.display = 'flex';
+            renderTrips();
+        } else if (tab === 'storage') {
+            document.getElementById('add-storage-fab').style.display = 'flex';
+            renderStorage();
+        }
+    }
+    // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
+    // Навигация
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => switchTab(item.dataset.tab));
+    });
+
+    // Календарь: навигация по месяцам
+    document.getElementById('cal-prev').addEventListener('click', () => {
+        if (calendarMonth === 1) { calendarMonth = 12; calendarYear--; }
+        else calendarMonth--;
+        renderCalendar();
+    });
+    document.getElementById('cal-next').addEventListener('click', () => {
+        if (calendarMonth === 12) { calendarMonth = 1; calendarYear++; }
+        else calendarMonth++;
+        renderCalendar();
+    });
+
+    // Добавить событие
+    document.getElementById('add-event-fab').addEventListener('click', () => openEventModal());
+    document.getElementById('cancel-event-btn').addEventListener('click', () => {
+        document.getElementById('modal-event').style.display = 'none';
+    });
+    document.getElementById('save-event-btn').addEventListener('click', async () => {
+        const title = document.getElementById('event-title-input').value.trim();
+        if (!title) return;
+        const eventId = editingEventId || generateId();
+        await saveEvent(selectedDate, eventId, { eventId, title, color: eventColor, time: '', date: selectedDate });
+        document.getElementById('modal-event').style.display = 'none';
+        editingEventId = null;
+    });
+    document.getElementById('delete-event-btn').addEventListener('click', async () => {
+        if (editingEventId) {
+            await deleteEvent(selectedDate, editingEventId);
+            document.getElementById('modal-event').style.display = 'none';
+            editingEventId = null;
+        }
+    });
+
+    // Чек-лист: добавление
+    document.getElementById('add-danil-btn').addEventListener('click', async () => {
+        const input = document.getElementById('new-item-danil');
+        const text = input.value.trim();
+        if (!text) return;
+        const item = { id: generateId(), text, done: false, order: checklistDanil.length };
+        await saveChecklistItem('danil', item);
+        input.value = '';
+    });
+    document.getElementById('add-nastya-btn').addEventListener('click', async () => {
+        const input = document.getElementById('new-item-nastya');
+        const text = input.value.trim();
+        if (!text) return;
+        const item = { id: generateId(), text, done: false, order: checklistNastya.length };
+        await saveChecklistItem('nastya', item);
+        input.value = '';
+    });
+    document.getElementById('new-item-danil').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('add-danil-btn').click();
+    });
+    document.getElementById('new-item-nastya').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('add-nastya-btn').click();
+    });
+
+    // Поездки: модальные окна
+    document.getElementById('add-trip-fab').addEventListener('click', () => openTripModal());
+    document.getElementById('cancel-trip-btn').addEventListener('click', () => {
+        document.getElementById('modal-trip').style.display = 'none';
+    });
+    document.getElementById('save-trip-btn').addEventListener('click', async () => {
+        const title = document.getElementById('trip-title-input').value.trim();
+        if (!title) return;
+        const note = document.getElementById('trip-note-input').value.trim();
+        const imageInput = document.getElementById('trip-image-input');
+        let image = null;
+        if (imageInput.files[0]) image = await fileToBase64(imageInput.files[0]);
+        const tripData = {
+            id: editingTripId || null,
+            title, note,
+            order: editingTripId ? (tripsCache.find(t=>t.id===editingTripId)?.order || tripsCache.length) : tripsCache.length,
+            scheduledDate: editingTripId ? (tripsCache.find(t=>t.id===editingTripId)?.scheduledDate || null) : null
+        };
+        if (image) tripData.image = image;
+        else if (editingTripId) tripData.image = tripsCache.find(t=>t.id===editingTripId)?.image || null;
+        await saveTrip(tripData);
+        document.getElementById('modal-trip').style.display = 'none';
+        editingTripId = null;
+    });
+    document.getElementById('delete-trip-btn').addEventListener('click', async () => {
+        if (editingTripId) {
+            await deleteTrip(editingTripId);
+            document.getElementById('modal-trip').style.display = 'none';
+            editingTripId = null;
+        }
+    });
+
+    // Перенос поездки на дату
+    document.getElementById('cancel-move-btn').addEventListener('click', () => {
+        document.getElementById('modal-move-trip').style.display = 'none';
+        moveTripId = null;
+    });
+    document.getElementById('confirm-move-btn').addEventListener('click', async () => {
+        const date = document.getElementById('move-trip-date').value;
+        if (!date || !moveTripId) return;
+        const trip = tripsCache.find(t => t.id === moveTripId);
+        if (trip) {
+            trip.scheduledDate = date;
+            await saveTrip(trip);
+            // Также добавляем событие в календарь
+            const eventId = 'trip_' + moveTripId;
+            await saveEvent(date, eventId, { eventId, title: '🗺️ ' + trip.title, color: '#34c759', time: '', date });
+            switchTab('calendar');
+            selectedDate = date;
+            calendarYear = new Date(date).getFullYear();
+            calendarMonth = new Date(date).getMonth() + 1;
+            renderCalendar();
+            renderDayEvents();
+        }
+        document.getElementById('modal-move-trip').style.display = 'none';
+        moveTripId = null;
+    });
+
+    // Хранилище
+    document.getElementById('add-storage-fab').addEventListener('click', () => openStorageModal());
+    document.getElementById('cancel-storage-btn').addEventListener('click', () => {
+        document.getElementById('modal-storage').style.display = 'none';
+    });
+    document.getElementById('save-storage-btn').addEventListener('click', async () => {
+        const title = document.getElementById('storage-title-input').value.trim();
+        if (!title) return;
+        const filesInput = document.getElementById('storage-files-input');
+        let files = editingStorageId ? (storageCache.find(s=>s.id===editingStorageId)?.files || []) : [];
+        if (filesInput.files.length > 0) {
+            for (const file of filesInput.files) {
+                const data = await fileToBase64(file);
+                const type = file.type.includes('pdf') ? 'pdf' : 'image';
+                files.push({ name: file.name, type, data });
+            }
+        }
+        const itemData = { id: editingStorageId || null, title, files };
+        await saveStorageItem(itemData);
+        document.getElementById('modal-storage').style.display = 'none';
+        editingStorageId = null;
+    });
+    document.getElementById('delete-storage-btn').addEventListener('click', async () => {
+        if (editingStorageId) {
+            await deleteStorageItem(editingStorageId);
+            document.getElementById('modal-storage').style.display = 'none';
+            editingStorageId = null;
+        }
+    });
+
+    // Закрытие модалок по клику на оверлей
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.style.display = 'none';
+        });
+    });
+
+    // Тёмная тема
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('china-trip-theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+        themeToggle.textContent = '🌙';
+    }
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        localStorage.setItem('china-trip-theme', isDark ? 'dark' : 'light');
+        themeToggle.textContent = isDark ? '🌙' : '☀️';
+    });
+
+    // ============ ЗАПУСК ============
+    function init() {
+        subscribeAll();
+        switchTab('calendar');
+    }
+    init();
+</script>
+</body>
+</html>
