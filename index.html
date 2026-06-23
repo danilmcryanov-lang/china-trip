@@ -17,7 +17,7 @@
         :root {
             --bg: #fdfaf5; --card-bg: #ffffff; --text: #1d1d1f; --text-secondary: #86868b;
             --border: #e8e3d8; --primary: #DE2910; --primary-light: #fde8ea; --gold: #FFDE00;
-            --gold-light: #fef9e7; --danger: #c1121f; --success: #2a9d8f; --warning: #e76f51;
+            --gold-light: #fef9e7; --danger: #c1121f; --success: #2a9d8f;
             --trip-range-bg: #fef9e7; --trip-range-border: #FFDE00;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 2px 8px rgba(0,0,0,0.08);
             --shadow-lg: 0 8px 30px rgba(0,0,0,0.12); --radius: 14px; --radius-sm: 10px; --radius-xs: 8px;
@@ -84,8 +84,6 @@
             box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: all 0.2s;
         }
         .card:active { transform: scale(0.985); }
-        .card.done-card { opacity: 0.55; }
-        .card.done-card .card-title-text { text-decoration: line-through; }
 
         .section-title {
             font-size: 20px; font-weight: 700; margin: 16px 0 10px;
@@ -146,10 +144,21 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-handle { width: 36px; height: 5px; background: var(--border); border-radius: 3px; margin: 0 auto 16px; }
 
-        /* Календарь */
+        /* Полоска-разделитель с отступами */
+        .gold-divider { height: 2px; background: var(--gold); margin: 10px 0 12px; border-radius: 1px; }
+        .gold-divider-top { height: 2px; background: var(--gold); margin: 0 0 10px; border-radius: 1px; }
+
+        /* Sticky контейнер для подвкладок */
+        .sticky-tabs-container {
+            position: sticky; top: 60px; z-index: 50;
+            background: var(--bg); padding: 8px 0 0; margin: 0 -16px;
+        }
+        .sticky-tabs-inner { padding: 0 16px; }
+        .sticky-tabs-container .gold-divider-top { margin: 0 16px 10px; }
+        .sticky-tabs-container .gold-divider { margin: 10px 16px 12px; }
+
         .view-toggle {
             display: flex; gap: 4px; background: var(--border); border-radius: 10px; padding: 3px;
-            margin-bottom: 12px; position: sticky; top: 60px; z-index: 50;
         }
         .view-toggle button {
             flex: 1; padding: 7px 12px; border: none; border-radius: 8px;
@@ -157,7 +166,6 @@
             background: transparent; color: var(--text-secondary); transition: all 0.2s;
         }
         .view-toggle button.active { background: var(--card-bg); color: var(--text); box-shadow: var(--shadow-sm); }
-        .view-toggle-divider { height: 2px; background: var(--gold); margin-bottom: 12px; border-radius: 1px; }
 
         .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
         .calendar-nav h3 { font-size: 18px; font-weight: 700; }
@@ -228,7 +236,6 @@
         /* Чек-листы */
         .checklist-tabs {
             display: flex; gap: 4px; background: var(--border); border-radius: 10px; padding: 3px;
-            margin-bottom: 12px; position: sticky; top: 60px; z-index: 50;
         }
         .checklist-tabs button {
             flex: 1; padding: 8px 12px; border: none; border-radius: 8px;
@@ -236,7 +243,6 @@
             background: transparent; color: var(--text-secondary); transition: all 0.2s;
         }
         .checklist-tabs button.active { background: var(--card-bg); color: var(--text); box-shadow: var(--shadow-sm); }
-        .checklist-tabs-divider { height: 2px; background: var(--gold); margin-bottom: 12px; border-radius: 1px; }
         .progress-bar { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--success); border-radius: 3px; transition: width 0.3s ease; }
         .checklist-item {
@@ -349,11 +355,16 @@
 
     <!-- Вкладка 1: Календарь -->
     <div id="tab-calendar" style="display:none;">
-        <div class="view-toggle">
-            <button class="active" data-view="month">🗓️ Месяц</button>
-            <button data-view="week">📋 Неделя</button>
+        <div class="sticky-tabs-container">
+            <div class="gold-divider-top"></div>
+            <div class="sticky-tabs-inner">
+                <div class="view-toggle">
+                    <button class="active" data-view="month">🗓️ Месяц</button>
+                    <button data-view="week">📋 Неделя</button>
+                </div>
+            </div>
+            <div class="gold-divider"></div>
         </div>
-        <div class="view-toggle-divider"></div>
         <div id="view-month">
             <div class="calendar-nav">
                 <button id="cal-prev">◀</button>
@@ -377,11 +388,16 @@
 
     <!-- Вкладка 2: Чек-лист -->
     <div id="tab-checklist" style="display:none;">
-        <div class="checklist-tabs">
-            <button class="active" data-user="danil">👤 Данил</button>
-            <button data-user="nastya">👤 Анастасия</button>
+        <div class="sticky-tabs-container">
+            <div class="gold-divider-top"></div>
+            <div class="sticky-tabs-inner">
+                <div class="checklist-tabs">
+                    <button class="active" data-user="danil">👤 Данил</button>
+                    <button data-user="nastya">👤 Анастасия</button>
+                </div>
+            </div>
+            <div class="gold-divider"></div>
         </div>
-        <div class="checklist-tabs-divider"></div>
         <div id="checklist-danil-panel">
             <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
             <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
@@ -446,11 +462,11 @@
     <div class="file-viewer-content" id="file-viewer-content"></div>
 </div>
 
-<!-- Модальное окно: Добавить/редактировать событие -->
+<!-- Модальное окно: Добавить событие -->
 <div class="modal-overlay" id="modal-event" style="display:none;">
     <div class="modal">
         <div class="modal-handle"></div>
-        <h3 id="modal-event-title">Добавить событие</h3>
+        <h3>Добавить событие</h3>
         <label style="font-size:12px;color:var(--text-secondary);">Дата:</label>
         <input type="date" class="input" id="event-date-input" style="margin:6px 0 10px;" />
         <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin-bottom:10px;" />
@@ -528,7 +544,6 @@
     let weekStart = getMonday(new Date());
     let currentView = 'month';
     let currentChecklistUser = 'danil';
-    let editingEventId = null;
     let editingTripId = null;
     let editingStorageId = null;
     let moveTripId = null;
@@ -561,27 +576,41 @@
     async function deleteEvent(date, eventId) { await deleteDoc(doc(db, 'events', date + '_' + eventId)); }
     async function saveChecklistItem(user, item) { await setDoc(doc(db, 'checklist', user + '_' + item.id), { user, ...item }); }
     async function deleteChecklistItem(user, itemId) { await deleteDoc(doc(db, 'checklist', user + '_' + itemId)); }
+
     async function saveTrip(trip) {
-        if (trip.id) await setDoc(doc(db, 'trips', trip.id), trip);
-        else { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
-        // Сразу обновляем кэш локально
-        const idx = tripsCache.findIndex(t => t.id === trip.id);
-        if (idx >= 0) tripsCache[idx] = trip;
-        else tripsCache.push(trip);
+        // Сразу добавляем в кэш с пометкой _pending
+        const existingIdx = tripsCache.findIndex(t => t.id === trip.id);
+        if (existingIdx >= 0) {
+            tripsCache[existingIdx] = { ...trip, _pending: false };
+        } else {
+            tripsCache.push({ ...trip, _pending: false });
+        }
         tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
         if (currentTab === 'trips') renderTrips();
         if (currentTab === 'calendar') renderDayEvents();
+
+        // Затем сохраняем в Firebase
+        if (trip.id) await setDoc(doc(db, 'trips', trip.id), trip);
+        else { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
     }
+
     async function deleteTrip(tripId) { await deleteDoc(doc(db, 'trips', tripId)); }
+
     async function saveStorageItem(item) {
+        // Сразу добавляем в кэш с пометкой _pending
+        const existingIdx = storageCache.findIndex(s => s.id === item.id);
+        if (existingIdx >= 0) {
+            storageCache[existingIdx] = { ...item, _pending: false };
+        } else {
+            storageCache.push({ ...item, _pending: false });
+        }
+        if (currentTab === 'storage') renderStorage();
+
+        // Затем сохраняем в Firebase
         if (item.id) await setDoc(doc(db, 'storage', item.id), item);
         else { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
-        // Сразу обновляем кэш локально
-        const idx = storageCache.findIndex(s => s.id === item.id);
-        if (idx >= 0) storageCache[idx] = item;
-        else storageCache.push(item);
-        if (currentTab === 'storage') renderStorage();
     }
+
     async function deleteStorageItem(itemId) { await deleteDoc(doc(db, 'storage', itemId)); }
 
     function subscribeAll() {
@@ -598,15 +627,29 @@
             if (currentTab === 'checklist') renderActiveChecklist();
         });
         onSnapshot(collection(db, 'trips'), (snap) => {
-            tripsCache = [];
-            snap.forEach(d => tripsCache.push({ id: d.id, ...d.data() }));
+            const serverTrips = {};
+            snap.forEach(d => { serverTrips[d.id] = { id: d.id, ...d.data() }; });
+            // Мержим серверные данные в кэш
+            for (const [id, data] of Object.entries(serverTrips)) {
+                const idx = tripsCache.findIndex(t => t.id === id);
+                if (idx >= 0) { tripsCache[idx] = { ...tripsCache[idx], ...data, _pending: false }; }
+                else { tripsCache.push({ ...data, _pending: false }); }
+            }
+            // Удаляем только то, чего нет на сервере и что не является pending
+            tripsCache = tripsCache.filter(t => serverTrips[t.id] || t._pending);
             tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
             if (currentTab === 'trips') renderTrips();
             if (currentTab === 'calendar') renderDayEvents();
         });
         onSnapshot(collection(db, 'storage'), (snap) => {
-            storageCache = [];
-            snap.forEach(d => storageCache.push({ id: d.id, ...d.data() }));
+            const serverStorage = {};
+            snap.forEach(d => { serverStorage[d.id] = { id: d.id, ...d.data() }; });
+            for (const [id, data] of Object.entries(serverStorage)) {
+                const idx = storageCache.findIndex(s => s.id === id);
+                if (idx >= 0) { storageCache[idx] = { ...storageCache[idx], ...data, _pending: false }; }
+                else { storageCache.push({ ...data, _pending: false }); }
+            }
+            storageCache = storageCache.filter(s => serverStorage[s.id] || s._pending);
             if (currentTab === 'storage') renderStorage();
         });
     }
@@ -675,14 +718,14 @@
             if (isInTripRange(dateStr)) card.classList.add('trip-range');
             const dayEvents = eventsCache[dateStr] || [];
             const tripEvents = tripsCache.filter(t => t.scheduledDate === dateStr);
-            const allEvents = [...dayEvents, ...tripEvents.map(t => ({ eventId: 'trip_' + t.id, title: '🗺️ ' + t.title, color: '#2a9d8f', isTrip: true, tripId: t.id }))];
+            const allEvents = [...dayEvents, ...tripEvents.map(t => ({ eventId: 'trip_' + t.id, title: '🗺️ ' + t.title, isTrip: true, tripId: t.id, done: (eventsCache[dateStr]||[]).find(e => e.eventId === 'trip_' + t.id)?.done || false }))];
             const chipsHtml = allEvents.length > 0
                 ? allEvents.map(e => `<span class="week-event-chip" style="background:#DE2910;">${escapeHtml(e.title)}</span>`).join('')
                 : '';
             const expandedHtml = allEvents.map(e => `
                 <div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="${e.isTrip||false}" data-trip-id="${e.tripId||''}">
                     <div class="checkbox${e.done?' checked':''}"></div>
-                    <span style="flex:1;">${escapeHtml(e.title)}</span>
+                    <span style="flex:1;${e.done?'text-decoration:line-through;color:var(--text-secondary);':''}">${escapeHtml(e.title)}</span>
                     <button class="delete-event-btn">✕</button>
                 </div>
             `).join('');
@@ -698,22 +741,15 @@
                 if (e.target.closest('.checkbox') || e.target.closest('.delete-event-btn')) return;
                 card.classList.toggle('expanded');
             });
-            // Галочки и удаление внутри раскрытого списка
             card.querySelectorAll('.week-expanded-event').forEach(evRow => {
                 evRow.querySelector('.checkbox').addEventListener('click', async (ev) => {
                     ev.stopPropagation();
                     const isTrip = evRow.dataset.isTrip === 'true';
                     const eventId = evRow.dataset.eventId;
                     const date = evRow.dataset.date;
-                    if (isTrip) {
-                        const tripId = evRow.dataset.tripId;
-                        const evData = (eventsCache[date] || []).find(e => e.eventId === eventId);
-                        if (evData) { evData.done = !evData.done; await saveEvent(date, eventId, evData); }
-                        else { await saveEvent(date, eventId, { eventId, title: evRow.querySelector('span').textContent, color: '#2a9d8f', time: '', date, done: true }); }
-                    } else {
-                        const evData = (eventsCache[date] || []).find(e => e.eventId === eventId);
-                        if (evData) { evData.done = !evData.done; await saveEvent(date, eventId, evData); }
-                    }
+                    const evData = (eventsCache[date] || []).find(e => e.eventId === eventId);
+                    if (evData) { evData.done = !evData.done; await saveEvent(date, eventId, evData); }
+                    else { await saveEvent(date, eventId, { eventId, title: evRow.querySelector('span').textContent, time: '', date, done: true }); }
                 });
                 evRow.querySelector('.delete-event-btn').addEventListener('click', async (ev) => {
                     ev.stopPropagation();
@@ -725,10 +761,8 @@
                             const tripId = evRow.dataset.tripId;
                             const trip = tripsCache.find(t => t.id === tripId);
                             if (trip) { trip.scheduledDate = null; await saveTrip(trip); }
-                            await deleteEvent(date, eventId);
-                        } else {
-                            await deleteEvent(date, eventId);
                         }
+                        await deleteEvent(date, eventId);
                     }
                 });
             });
@@ -771,21 +805,16 @@
             row.querySelector('.checkbox').addEventListener('click', async (e) => {
                 e.stopPropagation();
                 const eventId = row.dataset.eventId;
-                const isTrip = row.dataset.isTrip === 'true';
                 const evData = (eventsCache[selectedDate] || []).find(e => e.eventId === eventId);
                 if (evData) { evData.done = !evData.done; await saveEvent(selectedDate, eventId, evData); }
-                else if (isTrip) {
-                    await saveEvent(selectedDate, eventId, { eventId, title: row.querySelector('.event-text').textContent, color: '#2a9d8f', time: '', date: selectedDate, done: true });
-                }
+                else { await saveEvent(selectedDate, eventId, { eventId, title: row.querySelector('.event-text').textContent, time: '', date: selectedDate, done: true }); }
             });
             row.querySelector('.delete-event-btn').addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if (confirm('Удалить событие?')) {
                     const eventId = row.dataset.eventId;
-                    const isTrip = row.dataset.isTrip === 'true';
-                    if (isTrip) {
-                        const tripId = row.dataset.tripId;
-                        const trip = tripsCache.find(t => t.id === tripId);
+                    if (row.dataset.isTrip === 'true') {
+                        const trip = tripsCache.find(t => t.id === row.dataset.tripId);
                         if (trip) { trip.scheduledDate = null; await saveTrip(trip); }
                     }
                     await deleteEvent(selectedDate, eventId);
@@ -905,13 +934,10 @@
     document.getElementById('week-next').addEventListener('click', () => { weekStart.setDate(weekStart.getDate() + 7); renderWeekView(); });
 
     document.getElementById('add-event-fab').addEventListener('click', () => {
-        editingEventId = null;
-        document.getElementById('modal-event-title').textContent = 'Добавить событие';
         document.getElementById('event-date-input').value = selectedDate;
         document.getElementById('event-title-input').value = '';
         document.getElementById('modal-event').style.display = 'flex';
     });
-
     document.getElementById('cancel-event-btn').addEventListener('click', () => document.getElementById('modal-event').style.display = 'none');
     document.getElementById('save-event-btn').addEventListener('click', async () => {
         const title = document.getElementById('event-title-input').value.trim();
@@ -921,7 +947,7 @@
         await saveEvent(date, eventId, { eventId, title, time: '', date, done: false, order: 0 });
         document.getElementById('modal-event').style.display = 'none';
         if (currentView === 'month') renderCalendar(); else renderWeekView();
-        if (currentView === 'month') { if (date === selectedDate) renderDayEvents(); }
+        if (currentView === 'month' && date === selectedDate) renderDayEvents();
     });
 
     document.getElementById('add-danil-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-danil'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('danil', { id: generateId(), text, done: false, order: checklistDanil.length }); input.value = ''; });
@@ -972,8 +998,7 @@
                 }
             } catch(e) { alert('Ошибка загрузки файлов. Попробуйте ещё раз.'); return; }
         }
-        const newItem = { id: editingStorageId || null, title, files };
-        await saveStorageItem(newItem);
+        await saveStorageItem({ id: editingStorageId || null, title, files });
         document.getElementById('modal-storage').style.display = 'none';
         editingStorageId = null;
     });
