@@ -136,11 +136,11 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-handle { width: 36px; height: 5px; background: var(--border); border-radius: 3px; margin: 0 auto 16px; }
 
-        .gold-line { height: 2px; background: var(--gold); border-radius: 1px; }
-
         .sticky-tabs-wrap {
             position: sticky; top: 60px; z-index: 50; background: var(--bg);
-            padding: 10px 16px 10px; margin: 0 -16px;
+            padding: 10px 16px; margin: 0 -16px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
         }
 
         .view-toggle {
@@ -191,21 +191,15 @@
         .week-list { display: flex; flex-direction: column; gap: 6px; }
         .week-day-card {
             background: var(--card-bg); border-radius: var(--radius-sm); padding: 10px 12px;
-            border: 2px solid transparent; cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow-sm);
+            border: 2px solid transparent; transition: all 0.15s; box-shadow: var(--shadow-sm);
         }
         .week-day-card.today { border-color: var(--primary); }
         .week-day-card.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
         .week-day-card .week-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .week-day-card .week-card-date { font-weight: 700; font-size: 14px; }
         .week-day-card .week-card-day { font-size: 11px; color: var(--text-secondary); }
-        .week-day-card .week-expanded-events { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-        .week-day-card.expanded .week-expanded-events { display: block; }
-        .week-day-card .week-events-list { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
-        .week-day-card .week-event-chip {
-            display: inline-block; padding: 3px 8px; border-radius: 12px;
-            font-size: 11px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
-        }
-        .week-expanded-event { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+        .week-day-card .week-events-list { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+        .week-expanded-event { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
         .week-expanded-event .checkbox {
             width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px;
             flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
@@ -216,7 +210,7 @@
             opacity: 0; background: none; border: none; color: var(--danger);
             cursor: pointer; font-size: 14px; padding: 2px; transition: opacity 0.2s;
         }
-        .week-day-card:hover .delete-event-btn, .week-day-card:active .delete-event-btn { opacity: 1; }
+        .week-day-card:active .delete-event-btn { opacity: 1; }
 
         .progress-bar { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--success); border-radius: 3px; transition: width 0.3s ease; }
@@ -330,14 +324,12 @@
 
     <!-- Вкладка 1: Календарь -->
     <div id="tab-calendar" style="display:none;">
-        <div class="gold-line"></div>
         <div class="sticky-tabs-wrap">
             <div class="view-toggle">
                 <button class="active" data-view="month">🗓️ Месяц</button>
                 <button data-view="week">📋 Неделя</button>
             </div>
         </div>
-        <div class="gold-line"></div>
         <div id="view-month">
             <div class="calendar-nav">
                 <button id="cal-prev">◀</button>
@@ -361,14 +353,12 @@
 
     <!-- Вкладка 2: Чек-лист -->
     <div id="tab-checklist" style="display:none;">
-        <div class="gold-line"></div>
         <div class="sticky-tabs-wrap">
             <div class="checklist-tabs">
                 <button class="active" data-user="danil">👤 Данил</button>
                 <button data-user="nastya">👤 Анастасия</button>
             </div>
         </div>
-        <div class="gold-line"></div>
         <div id="checklist-danil-panel">
             <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
             <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
@@ -675,9 +665,23 @@
         document.getElementById('file-viewer-name').textContent = file.name;
         document.getElementById('file-viewer-content').innerHTML = '';
         if (file.type === 'pdf') {
+            // Преобразуем base64 в Blob для корректного отображения всех страниц на мобильных
+            const base64 = file.data.split(',')[1];
+            const byteCharacters = atob(base64);
+            const byteArrays = [];
+            for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+                const slice = byteCharacters.slice(offset, offset + 1024);
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                byteArrays.push(new Uint8Array(byteNumbers));
+            }
+            const blob = new Blob(byteArrays, { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
             const iframe = document.createElement('iframe');
-            iframe.src = file.data;
-            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.src = blobUrl;
+            iframe.onload = () => URL.revokeObjectURL(blobUrl);
             iframe.style.minHeight = '80vh';
             document.getElementById('file-viewer-content').appendChild(iframe);
         } else {
@@ -732,31 +736,34 @@
             const card = document.createElement('div'); card.className = 'week-day-card';
             if (dateStr === todayStr) card.classList.add('today');
             if (isInTripRange(dateStr)) card.classList.add('trip-range');
+
             const dayEvents = eventsCache[dateStr] || [];
-            const tripEvents = tripsCache.filter(t => t.scheduledDate === dateStr);
-            const allEvents = [...dayEvents, ...tripEvents.map(t => ({ eventId: 'trip_' + t.id, title: '🗺️ ' + t.title, isTrip: true, tripId: t.id, done: (eventsCache[dateStr]||[]).find(e => e.eventId === 'trip_' + t.id)?.done || false }))];
-            const chipsHtml = allEvents.length > 0
-                ? allEvents.map(e => `<span class="week-event-chip" style="background:#DE2910;">${escapeHtml(e.title)}</span>`).join('')
-                : '';
-            const expandedHtml = allEvents.map(e => `
+            const tripEventIds = new Set(dayEvents.map(e => e.eventId));
+            const allEvents = [...dayEvents];
+            // Добавляем события из поездок, только если их ещё нет в dayEvents
+            tripsCache.filter(t => t.scheduledDate === dateStr).forEach(trip => {
+                const eid = 'trip_' + trip.id;
+                if (!tripEventIds.has(eid)) {
+                    allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, isTrip: true, tripId: trip.id, done: false, date: dateStr });
+                }
+            });
+
+            const eventsHtml = allEvents.map(e => `
                 <div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="${e.isTrip||false}" data-trip-id="${e.tripId||''}">
                     <div class="checkbox${e.done?' checked':''}"></div>
                     <span style="flex:1;${e.done?'text-decoration:line-through;color:var(--text-secondary);':''}">${escapeHtml(e.title)}</span>
                     <button class="delete-event-btn">✕</button>
                 </div>
             `).join('');
+
             card.innerHTML = `
                 <div class="week-card-header">
                     <span class="week-card-date">${day.getDate()} ${months[day.getMonth()]}</span>
                     <span class="week-card-day">${dayNames[i]}</span>
                 </div>
-                ${chipsHtml ? `<div class="week-events-list">${chipsHtml}</div>` : ''}
-                <div class="week-expanded-events">${expandedHtml || '<div style="font-size:12px;color:var(--text-secondary);">Нет событий</div>'}</div>
+                <div class="week-events-list">${eventsHtml || '<div style="font-size:12px;color:var(--text-secondary);">Нет событий</div>'}</div>
             `;
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('.checkbox') || e.target.closest('.delete-event-btn')) return;
-                card.classList.toggle('expanded');
-            });
+            // Обработчики чекбоксов и удаления
             card.querySelectorAll('.week-expanded-event').forEach(evRow => {
                 evRow.querySelector('.checkbox').addEventListener('click', async (ev) => {
                     ev.stopPropagation();
@@ -789,21 +796,25 @@
         const container = document.getElementById('day-events');
         if (currentView === 'week') return;
         document.getElementById('selected-date-label').textContent = new Date(selectedDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
         const dayEvents = eventsCache[selectedDate] || [];
-        const tripEvents = tripsCache.filter(t => t.scheduledDate === selectedDate);
-        if (dayEvents.length === 0 && tripEvents.length === 0) {
+        const tripEventIds = new Set(dayEvents.map(e => e.eventId));
+        // Добавляем поездки, только если их нет в кэше
+        const allEvents = [...dayEvents];
+        tripsCache.filter(t => t.scheduledDate === selectedDate).forEach(trip => {
+            const eid = 'trip_' + trip.id;
+            if (!tripEventIds.has(eid)) {
+                allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, done: false, time: '', date: selectedDate, isTrip: true, tripId: trip.id });
+            }
+        });
+
+        if (allEvents.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>';
             return;
         }
         let html = '';
-        dayEvents.forEach(e => {
-            html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}"><div class="checkbox${e.done?' checked':''}"></div><span class="event-text">${escapeHtml(e.title)}</span><button class="delete-event-btn">✕</button></div>`;
-        });
-        tripEvents.forEach(trip => {
-            const tripEventId = 'trip_' + trip.id;
-            const tripEventData = (eventsCache[selectedDate] || []).find(e => e.eventId === tripEventId);
-            const done = tripEventData ? tripEventData.done : false;
-            html += `<div class="day-event-row${done?' done':''}" data-event-id="${tripEventId}" data-is-trip="true" data-trip-id="${trip.id}"><div class="checkbox${done?' checked':''}"></div><span class="event-text">🗺️ ${escapeHtml(trip.title)}</span><button class="delete-event-btn">✕</button></div>`;
+        allEvents.forEach(e => {
+            html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}" data-is-trip="${e.isTrip||false}" data-trip-id="${e.tripId||''}"><div class="checkbox${e.done?' checked':''}"></div><span class="event-text">${escapeHtml(e.title)}</span><button class="delete-event-btn">✕</button></div>`;
         });
         container.innerHTML = `<div class="card">${html}</div>`;
         container.querySelectorAll('.day-event-row').forEach(row => {
@@ -956,7 +967,7 @@
         const title = document.getElementById('event-title-input').value.trim();
         const date = document.getElementById('event-date-input').value;
         if (!title || !date) return;
-        const eventId = generateId(); // один раз генерируем id
+        const eventId = generateId();
         await saveEvent(date, eventId, { eventId, title, time: '', date, done: false, order: 0 });
         document.getElementById('modal-event').style.display = 'none';
         if (currentView === 'month') renderCalendar(); else renderWeekView();
@@ -1001,7 +1012,7 @@
             image,
             _local: true
         };
-        this.disabled = true; // блокируем кнопку до завершения
+        this.disabled = true;
         try {
             await saveTrip(tripData);
             document.getElementById('modal-trip').style.display = 'none';
@@ -1022,7 +1033,6 @@
             const oldDate = trip.scheduledDate;
             trip.scheduledDate = date;
             await saveTrip(trip);
-            // удаляем старое событие, если дата изменилась
             if (oldDate && oldDate !== date) {
                 await deleteEvent(oldDate, 'trip_' + moveTripId);
             }
