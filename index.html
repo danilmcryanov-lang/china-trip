@@ -41,7 +41,6 @@
             position: sticky; top: 0; z-index: 99;
             background: var(--bg); padding: 14px 0 8px;
             display: flex; justify-content: space-between; align-items: center;
-            /* border-bottom убран, чтобы не дублировать золотую линию */
         }
         .header-left { display: flex; align-items: center; gap: 8px; }
         .header-flag { font-size: 32px; }
@@ -595,11 +594,18 @@
 
     async function saveStorageItem(item) {
         try {
-            if (!item.id) { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
-            else { await setDoc(doc(db, 'storage', item.id), item); }
+            if (item.id) {
+                await setDoc(doc(db, 'storage', item.id), item);
+            } else {
+                const ref = doc(collection(db, 'storage'));
+                item.id = ref.id;
+                item.order = storageCache.length; // порядок добавления
+                await setDoc(ref, item);
+            }
             const idx = storageCache.findIndex(s => s.id === item.id);
             if (idx >= 0) storageCache[idx] = { ...item, _local: false };
             else storageCache.push({ ...item, _local: false });
+            storageCache.sort((a,b) => (a.order||0) - (b.order||0));
             if (currentTab === 'storage') renderStorage();
         } catch(e) { alert('Ошибка сохранения файлов. Возможно, файл слишком большой.'); throw e; }
     }
@@ -615,8 +621,9 @@
         onSnapshot(collection(db, 'checklist'), (snap) => {
             checklistDanil = []; checklistNastya = [];
             snap.forEach(d => { const data = d.data(); if (data.user === 'danil') checklistDanil.push(data); else if (data.user === 'nastya') checklistNastya.push(data); });
-            checklistDanil.sort((a,b) => (a.order||0) - (b.order||0));
-            checklistNastya.sort((a,b) => (a.order||0) - (b.order||0));
+            // сортировка по id (времени добавления)
+            checklistDanil.sort((a,b) => a.id.localeCompare(b.id));
+            checklistNastya.sort((a,b) => a.id.localeCompare(b.id));
             if (currentTab === 'checklist') renderActiveChecklist();
         });
         onSnapshot(collection(db, 'trips'), (snap) => {
@@ -641,6 +648,7 @@
                 else storageCache.push(data);
             }
             storageCache = storageCache.filter(s => serverStorage[s.id] || s._local);
+            storageCache.sort((a,b) => (a.order||0) - (b.order||0));
             if (currentTab === 'storage') renderStorage();
         });
     }
@@ -718,7 +726,6 @@
         for (let i = 0; i < 7; i++) {
             const day = new Date(weekStart);
             day.setDate(day.getDate() + i);
-            // Исправление сдвига даты: формируем строку из локальных компонентов
             const dateStr = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
             const card = document.createElement('div'); card.className = 'week-day-card';
             if (dateStr === todayStr) card.classList.add('today');
@@ -731,13 +738,17 @@
                 const eid = 'trip_' + trip.id;
                 if (!tripEventIds.has(eid)) allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, isTrip: true, tripId: trip.id, done: false, date: dateStr });
             });
+            // сортировка событий по eventId
+            allEvents.sort((a,b) => a.eventId.localeCompare(b.eventId));
 
             let eventsHtml = '';
             allEvents.forEach(e => {
                 if (e.isTrip) {
-                    const trip = tripsCache.find(t => t.id === e.tripId);
+                    // ищем по tripId или извлекаем из eventId
+                    const tripId = e.tripId || (e.eventId.startsWith('trip_') ? e.eventId.substring(5) : null);
+                    const trip = tripId ? tripsCache.find(t => t.id === tripId) : null;
                     const imgHtml = trip?.image ? `<img src="${trip.image}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0;" />` : '';
-                    eventsHtml += `<div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="true" data-trip-id="${e.tripId||''}">
+                    eventsHtml += `<div class="week-expanded-event" data-event-id="${e.eventId}" data-date="${dateStr}" data-is-trip="true" data-trip-id="${tripId||''}">
                         <div class="checkbox${e.done?' checked':''}"></div>
                         ${imgHtml}
                         <div style="flex:1;min-width:0;">
@@ -797,15 +808,18 @@
             const eid = 'trip_' + trip.id;
             if (!tripEventIds.has(eid)) allEvents.push({ eventId: eid, title: '🗺️ ' + trip.title, done: false, time: '', date: selectedDate, isTrip: true, tripId: trip.id });
         });
+        // сортировка
+        allEvents.sort((a,b) => a.eventId.localeCompare(b.eventId));
 
         if (allEvents.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>'; return; }
 
         let html = '';
         allEvents.forEach(e => {
             if (e.isTrip) {
-                const trip = tripsCache.find(t => t.id === e.tripId);
+                const tripId = e.tripId || (e.eventId.startsWith('trip_') ? e.eventId.substring(5) : null);
+                const trip = tripId ? tripsCache.find(t => t.id === tripId) : null;
                 const imgHtml = trip?.image ? `<img src="${trip.image}" style="width:55px;height:55px;object-fit:cover;border-radius:8px;flex-shrink:0;" />` : '';
-                html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}" data-is-trip="true" data-trip-id="${e.tripId||''}">
+                html += `<div class="day-event-row${e.done?' done':''}" data-event-id="${e.eventId}" data-is-trip="true" data-trip-id="${tripId||''}">
                     <div class="checkbox${e.done?' checked':''}"></div>
                     ${imgHtml}
                     <div class="event-text" style="flex:1;min-width:0;">
@@ -859,12 +873,13 @@
 
     function renderChecklistGroup(user, items) {
         const container = document.getElementById(`checklist-${user}`);
-        const doneCount = items.filter(i => i.done).length;
-        const total = items.length;
+        const sorted = [...items].sort((a,b) => a.id.localeCompare(b.id));
+        const doneCount = sorted.filter(i => i.done).length;
+        const total = sorted.length;
         const percent = total > 0 ? Math.round((doneCount/total)*100) : 0;
         document.getElementById(`${user}-progress`).textContent = `${doneCount}/${total}`;
         document.getElementById(`${user}-bar`).style.width = percent + '%';
-        container.innerHTML = items.map(item => `<div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}"><div class="checkbox"></div><span class="item-text">${escapeHtml(item.text)}</span><button class="delete-item">✕</button></div>`).join('');
+        container.innerHTML = sorted.map(item => `<div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}"><div class="checkbox"></div><span class="item-text">${escapeHtml(item.text)}</span><button class="delete-item">✕</button></div>`).join('');
         container.querySelectorAll('.checklist-item').forEach(el => {
             el.querySelector('.checkbox').addEventListener('click', async (e) => { e.stopPropagation(); const u = el.dataset.user; const list = u === 'danil' ? checklistDanil : checklistNastya; const item = list.find(i => i.id === el.dataset.id); if (item) { item.done = !item.done; await saveChecklistItem(u, item); } });
             el.querySelector('.delete-item').addEventListener('click', async (e) => { e.stopPropagation(); await deleteChecklistItem(el.dataset.user, el.dataset.id); });
@@ -998,8 +1013,8 @@
         if (currentView === 'month' && date === selectedDate) renderDayEvents();
     });
 
-    document.getElementById('add-danil-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-danil'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('danil', { id: generateId(), text, done: false, order: checklistDanil.length }); input.value = ''; });
-    document.getElementById('add-nastya-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-nastya'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('nastya', { id: generateId(), text, done: false, order: checklistNastya.length }); input.value = ''; });
+    document.getElementById('add-danil-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-danil'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('danil', { id: generateId(), text, done: false }); input.value = ''; });
+    document.getElementById('add-nastya-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-nastya'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('nastya', { id: generateId(), text, done: false }); input.value = ''; });
     document.getElementById('new-item-danil').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('add-danil-btn').click(); });
     document.getElementById('new-item-nastya').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('add-nastya-btn').click(); });
 
@@ -1037,7 +1052,8 @@
             trip.scheduledDate = date;
             await saveTrip(trip);
             if (oldDate && oldDate !== date) await deleteEvent(oldDate, 'trip_' + moveTripId);
-            await saveEvent(date, 'trip_' + moveTripId, { eventId: 'trip_' + moveTripId, title: '🗺️ ' + trip.title, time: '', date, done: false, order: 0 });
+            // передаём tripId в данные события
+            await saveEvent(date, 'trip_' + moveTripId, { eventId: 'trip_' + moveTripId, title: '🗺️ ' + trip.title, time: '', date, done: false, order: 0, tripId: moveTripId });
             switchTab('calendar'); selectedDate = date; calendarYear = new Date(date).getFullYear(); calendarMonth = new Date(date).getMonth() + 1; weekStart = getMonday(new Date(date));
             if (currentView === 'month') { renderCalendar(); renderDayEvents(); } else renderWeekView();
         }
@@ -1062,6 +1078,10 @@
         }
 
         const item = { id: editingStorageId || null, title, files, _local: true };
+        if (editingStorageId) {
+            const existing = storageCache.find(s => s.id === editingStorageId);
+            if (existing) item.order = existing.order;
+        }
         this.disabled = true;
         try { await saveStorageItem(item); document.getElementById('modal-storage').style.display = 'none'; editingStorageId = null; }
         catch(e) {} finally { this.disabled = false; }
@@ -1069,7 +1089,6 @@
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; }); });
 
-    // Кнопка ключевых событий
     document.getElementById('key-events-btn').addEventListener('click', () => {
         renderKeyEventsModal();
         document.getElementById('modal-key-events').style.display = 'flex';
