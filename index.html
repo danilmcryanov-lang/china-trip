@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>China Trip Planner</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23e63946'/%3E%3Ctext x='256' y='360' text-anchor='middle' font-size='320'%3E🇨🇳%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23e63946'/%3E%3Ctext x='256' y='360' text-anchor='middle' font-size='320'%3E🇨🇳%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23DE2910'/%3E%3Cg transform='translate(56,96) scale(1.6)'%3E%3Cpolygon points='125,30 138,70 180,70 147,95 159,135 125,110 91,135 103,95 70,70 112,70' fill='%23FFDE00'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(50,30)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(190,15) scale(0.45)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(160,90) scale(0.35)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(200,65) scale(0.28)'/%3E%3C/g%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23DE2910'/%3E%3Cg transform='translate(56,96) scale(1.6)'%3E%3Cpolygon points='125,30 138,70 180,70 147,95 159,135 125,110 91,135 103,95 70,70 112,70' fill='%23FFDE00'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(50,30)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(190,15) scale(0.45)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(160,90) scale(0.35)'/%3E%3Cpolygon points='65,52 41,94 65,60 99,60 68,30 68,60' fill='%23FFDE00' transform='translate(200,65) scale(0.28)'/%3E%3C/g%3E%3C/svg%3E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="China Trip">
-    <meta name="theme-color" content="#e63946">
+    <meta name="theme-color" content="#DE2910">
     <script type="importmap">
         { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js", "firebase/firestore": "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js" } }
     </script>
     <style>
         :root {
             --bg: #fdfaf5; --card-bg: #ffffff; --text: #1d1d1f; --text-secondary: #86868b;
-            --border: #e8e3d8; --primary: #e63946; --primary-light: #fde8ea; --gold: #f0c040;
+            --border: #e8e3d8; --primary: #DE2910; --primary-light: #fde8ea; --gold: #FFDE00;
             --gold-light: #fef9e7; --danger: #c1121f; --success: #2a9d8f; --warning: #e76f51;
-            --trip-range-bg: #fef9e7; --trip-range-border: #f0c040;
+            --trip-range-bg: #fef9e7; --trip-range-border: #FFDE00;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 2px 8px rgba(0,0,0,0.08);
             --shadow-lg: 0 8px 30px rgba(0,0,0,0.12); --radius: 14px; --radius-sm: 10px; --radius-xs: 8px;
         }
@@ -111,7 +111,6 @@
         body.dark .btn.danger { background: #3d1c1c; }
         .btn.full { width: 100%; justify-content: center; }
         .btn.outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
-        .btn.gold { background: var(--gold); color: #1d1d1f; }
 
         .fab {
             position: fixed; bottom: 100px; right: 20px; width: 52px; height: 52px;
@@ -143,10 +142,7 @@
             max-height: 85vh; overflow-y: auto; animation: slideUp 0.3s ease-out;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-handle {
-            width: 36px; height: 5px; background: var(--border);
-            border-radius: 3px; margin: 0 auto 16px;
-        }
+        .modal-handle { width: 36px; height: 5px; background: var(--border); border-radius: 3px; margin: 0 auto 16px; }
 
         /* Календарь */
         .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -177,40 +173,44 @@
         .calendar-day.today { border-color: var(--primary); font-weight: 700; }
         .calendar-day.selected { background: var(--primary); color: white; }
         .calendar-day.other-month { color: var(--text-secondary); opacity: 0.35; }
-        .calendar-day.trip-range {
-            background: var(--trip-range-bg); border-color: var(--trip-range-border);
-        }
-        .calendar-day.today.trip-range { border-color: var(--primary); background: var(--trip-range-bg); }
+        .calendar-day.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
         .calendar-day .dots { display: flex; gap: 2px; margin-top: 1px; flex-wrap: wrap; justify-content: center; }
         .calendar-day .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
-        /* Неделя */
+        /* Неделя — вертикальный режим */
         .week-view { display: none; }
         .week-view.active { display: block; }
-        .week-scroll { max-height: calc(100vh - 250px); overflow-y: auto; }
-        .week-row {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-            min-height: 150px; border-bottom: 1px solid var(--border); padding: 6px 0;
+        .week-list { display: flex; flex-direction: column; gap: 6px; }
+        .week-day-card {
+            background: var(--card-bg); border-radius: var(--radius-sm); padding: 10px 12px;
+            border: 2px solid transparent; cursor: pointer; transition: all 0.15s;
+            box-shadow: var(--shadow-sm);
         }
-        .week-day {
-            padding: 6px 4px; border-radius: var(--radius-xs); cursor: pointer;
-            transition: all 0.15s; overflow-y: auto; font-size: 11px;
-            border: 2px solid transparent; min-height: 140px;
-            display: flex; flex-direction: column;
+        .week-day-card:hover { background: var(--bg); }
+        .week-day-card.today { border-color: var(--primary); }
+        .week-day-card.selected { background: var(--primary); color: white; }
+        .week-day-card.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
+        .week-day-card .week-card-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
         }
-        .week-day:hover { background: var(--bg); }
-        .week-day.today { border-color: var(--primary); }
-        .week-day.selected { background: var(--primary); color: white; }
-        .week-day.trip-range { background: var(--trip-range-bg); border-color: var(--trip-range-border); }
-        .week-day .week-date { font-weight: 700; margin-bottom: 4px; font-size: 13px; flex-shrink: 0; }
-        .week-day .week-event {
-            font-size: 10px; padding: 2px 5px; border-radius: 4px;
-            margin-bottom: 2px; white-space: normal; word-break: break-word;
-            cursor: pointer; line-height: 1.3; flex-shrink: 0;
+        .week-day-card .week-card-date { font-weight: 700; font-size: 14px; }
+        .week-day-card .week-card-day { font-size: 11px; color: var(--text-secondary); }
+        .week-day-card .week-events-list { display: flex; flex-direction: column; gap: 3px; }
+        .week-day-card .week-event-chip {
+            display: inline-block; padding: 3px 8px; border-radius: 12px;
+            font-size: 11px; color: white; cursor: pointer; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis; max-width: 100%;
         }
-        .week-day .week-event-more { font-size: 9px; color: var(--text-secondary); cursor: pointer; margin-top: 2px; }
+        .week-day-card .week-event-empty { font-size: 11px; color: var(--text-secondary); font-style: italic; }
 
         /* Чек-листы */
+        .checklist-tabs { display: flex; gap: 4px; background: var(--border); border-radius: 10px; padding: 3px; margin-bottom: 12px; }
+        .checklist-tabs button {
+            flex: 1; padding: 8px 12px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 13px; font-weight: 600;
+            background: transparent; color: var(--text-secondary); transition: all 0.2s;
+        }
+        .checklist-tabs button.active { background: var(--card-bg); color: var(--text); box-shadow: var(--shadow-sm); }
         .progress-bar { height: 5px; background: var(--border); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--success); border-radius: 3px; transition: width 0.3s ease; }
         .checklist-item {
@@ -233,60 +233,30 @@
             cursor: pointer; font-size: 16px; padding: 4px; transition: opacity 0.2s;
         }
         .checklist-item:active .delete-item { opacity: 1; }
-                /* Карточки поездок */
-        .trip-card {
+
+        /* Карточки поездок — универсальные */
+        .trip-card-mini {
             background: var(--card-bg); border-radius: var(--radius);
-            overflow: hidden; margin-bottom: 10px; border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm); transition: all 0.2s;
+            overflow: hidden; margin-bottom: 8px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm); transition: all 0.2s; cursor: pointer;
         }
-        .trip-card:active { transform: scale(0.985); }
-        .trip-card-preview {
-            padding: 12px 14px; cursor: pointer; display: flex; gap: 12px;
-            align-items: flex-start; min-height: 100px;
-        }
-        .trip-card-preview img {
-            width: 90px; height: 90px; object-fit: cover; border-radius: var(--radius-xs);
-            flex-shrink: 0;
-        }
-        .trip-card-preview .preview-info { flex: 1; min-width: 0; }
-        .trip-card-preview .preview-title {
-            font-weight: 700; font-size: 15px; margin-bottom: 4px;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .trip-card-preview .preview-note {
-            font-size: 12px; color: var(--text-secondary);
-            white-space: pre-wrap; overflow: hidden; display: -webkit-box;
-            -webkit-line-clamp: 3; -webkit-box-orient: vertical; line-height: 1.4;
-        }
-        .trip-card-preview .expand-icon {
-            font-size: 12px; color: var(--text-secondary); flex-shrink: 0;
-            margin-top: 4px; transition: transform 0.25s;
-        }
-        .trip-card.expanded .trip-card-preview .expand-icon { transform: rotate(90deg); }
-        .trip-card-body { display: none; padding: 0 14px 14px; }
-        .trip-card.expanded .trip-card-body { display: block; }
-        .trip-card-body img {
-            width: 100%; max-height: 220px; object-fit: cover;
-            border-radius: var(--radius-xs); margin-bottom: 8px;
-        }
-        .trip-card-body .note { font-size: 13px; color: var(--text-secondary); white-space: pre-wrap; margin-bottom: 8px; }
-        .trip-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .trip-card-actions .btn { flex: 1; min-width: 0; justify-content: center; font-size: 12px; padding: 8px 10px; border-radius: 12px; }
+        .trip-card-mini:active { transform: scale(0.985); }
+        .trip-card-mini-preview { padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start; }
+        .trip-card-mini-preview img { width: 55px; height: 55px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+        .trip-card-mini-info { flex: 1; min-width: 0; }
+        .trip-card-mini-title { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+        .trip-card-mini-note { font-size: 11px; color: var(--text-secondary); white-space: pre-wrap; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .trip-card-mini-body { display: none; padding: 0 12px 10px; }
+        .trip-card-mini.expanded .trip-card-mini-body { display: block; }
+        .trip-card-mini-body img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; }
+        .trip-card-mini-body .note { font-size: 12px; color: var(--text-secondary); white-space: pre-wrap; }
 
         /* Хранилище */
-        .storage-card {
-            background: var(--card-bg); border-radius: var(--radius);
-            padding: 14px; margin-bottom: 8px; border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-        }
+        .storage-card { background: var(--card-bg); border-radius: var(--radius); padding: 14px; margin-bottom: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
         .storage-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .storage-card-title { font-weight: 600; font-size: 15px; }
         .file-list { display: flex; flex-wrap: wrap; gap: 6px; }
-        .file-chip {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 12px; background: var(--bg); border-radius: 16px;
-            font-size: 12px; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border);
-        }
+        .file-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--bg); border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border); }
         .file-chip:active { background: var(--primary-light); }
         .file-chip .file-icon { font-size: 18px; }
         .file-chip .file-name { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -295,58 +265,32 @@
         .empty-state .empty-icon { font-size: 48px; opacity: 0.3; margin-bottom: 12px; }
         .empty-state p { font-size: 14px; }
 
-        .tag {
-            display: inline-block; padding: 3px 8px; border-radius: 10px;
-            font-size: 11px; font-weight: 600;
-        }
+        .tag { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
         .tag.green { background: #e8f5e9; color: #2e7d32; }
         body.dark .tag.green { background: #1a3020; color: #69f0ae; }
 
         .color-options { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-        .color-dot {
-            width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
-            border: 2px solid transparent; transition: all 0.15s;
-        }
+        .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
         .color-dot.selected { border-color: var(--text); transform: scale(1.15); }
 
         .event-detail-card { text-align: center; }
-        .event-detail-card .event-dot {
-            width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-bottom: 8px;
-        }
+        .event-detail-card .event-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-bottom: 8px; }
         .event-detail-card .event-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
         .event-detail-card .event-date { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
 
         /* Просмотр файлов */
-        .file-viewer-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.9); z-index: 300; display: flex;
-            flex-direction: column;
-        }
-        .file-viewer-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 16px; color: white; flex-shrink: 0;
-        }
-        .file-viewer-header button {
-            background: rgba(255,255,255,0.2); border: none; color: white;
-            padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;
-        }
-        .file-viewer-content {
-            flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center;
-        }
-        .file-viewer-content img {
-            max-width: 100%; max-height: 100%; object-fit: contain;
-        }
-        .file-viewer-content iframe {
-            width: 100%; height: 100%; border: none;
-        }
+        .file-viewer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 300; display: flex; flex-direction: column; }
+        .file-viewer-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; color: white; flex-shrink: 0; }
+        .file-viewer-header button { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+        .file-viewer-content { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; }
+        .file-viewer-content img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .file-viewer-content iframe { width: 100%; height: 100%; border: none; }
 
         @media (max-width: 380px) {
             .calendar-day { font-size: 11px; min-height: 30px; }
             .nav-item { padding: 4px 6px; font-size: 9px; }
             .nav-item svg { width: 18px; height: 18px; }
-            .week-day { font-size: 10px; min-height: 110px; }
-            .week-day .week-event { font-size: 9px; padding: 1px 3px; }
-            .trip-card-preview img { width: 65px; height: 65px; }
+            .trip-card-mini-preview img { width: 45px; height: 45px; }
         }
     </style>
 </head>
@@ -386,9 +330,7 @@
                 <h3 id="week-label"></h3>
                 <button id="week-next">▶</button>
             </div>
-            <div class="week-scroll">
-                <div class="week-row" id="week-grid"></div>
-            </div>
+            <div class="week-list" id="week-list"></div>
         </div>
         <div class="section-title">📌 События на <span id="selected-date-label"></span></div>
         <div id="day-events"></div>
@@ -397,20 +339,27 @@
 
     <!-- Вкладка 2: Чек-лист -->
     <div id="tab-checklist" style="display:none;">
-        <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
-        <div id="checklist-danil"></div>
-        <div style="display:flex;gap:6px;margin-bottom:10px;">
-            <input type="text" class="input" id="new-item-danil" placeholder="Добавить вещь..." />
-            <button class="btn primary small" id="add-danil-btn">+</button>
+        <div class="checklist-tabs">
+            <button class="active" data-user="danil">👤 Данил</button>
+            <button data-user="nastya">👤 Анастасия</button>
         </div>
-
-        <div class="section-title">👤 Анастасия <span class="count" id="nastya-progress"></span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" id="nastya-bar" style="width:0%"></div></div>
-        <div id="checklist-nastya"></div>
-        <div style="display:flex;gap:6px;margin-bottom:10px;">
-            <input type="text" class="input" id="new-item-nastya" placeholder="Добавить вещь..." />
-            <button class="btn primary small" id="add-nastya-btn">+</button>
+        <div id="checklist-danil-panel">
+            <div class="section-title">👤 Данил <span class="count" id="danil-progress"></span></div>
+            <div class="progress-bar"><div class="progress-bar-fill" id="danil-bar" style="width:0%"></div></div>
+            <div id="checklist-danil"></div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <input type="text" class="input" id="new-item-danil" placeholder="Добавить вещь..." />
+                <button class="btn primary small" id="add-danil-btn">+</button>
+            </div>
+        </div>
+        <div id="checklist-nastya-panel" style="display:none;">
+            <div class="section-title">👤 Анастасия <span class="count" id="nastya-progress"></span></div>
+            <div class="progress-bar"><div class="progress-bar-fill" id="nastya-bar" style="width:0%"></div></div>
+            <div id="checklist-nastya"></div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <input type="text" class="input" id="new-item-nastya" placeholder="Добавить вещь..." />
+                <button class="btn primary small" id="add-nastya-btn">+</button>
+            </div>
         </div>
     </div>
 
@@ -480,7 +429,9 @@
     <div class="modal">
         <div class="modal-handle"></div>
         <h3 id="modal-event-title">Добавить событие</h3>
-        <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin:10px 0;" />
+        <label style="font-size:12px;color:var(--text-secondary);">Дата:</label>
+        <input type="date" class="input" id="event-date-input" style="margin:6px 0 10px;" />
+        <input type="text" class="input" id="event-title-input" placeholder="Название события" style="margin-bottom:10px;" />
         <div class="color-options" id="event-color-picker"></div>
         <div style="display:flex;gap:8px;margin-top:14px;">
             <button class="btn secondary full" id="cancel-event-btn">Отмена</button>
@@ -549,118 +500,86 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ============ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ============
     let currentTab = 'calendar';
     let selectedDate = new Date().toISOString().slice(0,10);
     let calendarYear = new Date().getFullYear();
     let calendarMonth = new Date().getMonth() + 1;
     let weekStart = getMonday(new Date());
     let currentView = 'month';
+    let currentChecklistUser = 'danil';
     let editingEventId = null;
     let editingTripId = null;
     let editingStorageId = null;
     let moveTripId = null;
-    let eventColor = '#e63946';
+    let eventColor = '#DE2910';
     let detailEventData = null;
 
     const TRIP_START = '2026-07-08';
     const TRIP_END = '2026-08-09';
-
-    const colors = ['#e63946','#f0c040','#2a9d8f','#e76f51','#264653','#8ecae6','#ffb703','#8338ec'];
+    const STUDY_START = '2026-06-13';
+    const STUDY_END = '2026-08-07';
+    const colors = ['#DE2910','#FFDE00','#2a9d8f','#e76f51','#264653','#8ecae6','#ffb703','#8338ec'];
     const colorNames = ['Красный','Золотой','Зелёный','Оранжевый','Тёмный','Голубой','Янтарный','Фиолетовый'];
 
-    function getMonday(d) {
-        const date = new Date(d);
-        const day = date.getDay();
-        const diff = day === 0 ? -6 : 1 - day;
-        date.setDate(date.getDate() + diff);
-        date.setHours(0,0,0,0);
-        return date;
-    }
-    function formatDateISO(d) { return d.toISOString().slice(0,10); }
-    function isInTripRange(dateStr) { return dateStr >= TRIP_START && dateStr <= TRIP_END; }
-
-    // ============ КЭШ ДАННЫХ ============
     let eventsCache = {};
     let checklistDanil = [];
     let checklistNastya = [];
     let tripsCache = [];
     let storageCache = [];
 
-    // ============ FIREBASE ФУНКЦИИ ============
-    async function saveEvent(date, eventId, data) {
-        await setDoc(doc(db, 'events', date + '_' + eventId), { date, ...data });
+    function getMonday(d) { const date = new Date(d); const day = date.getDay(); const diff = day === 0 ? -6 : 1 - day; date.setDate(date.getDate() + diff); date.setHours(0,0,0,0); return date; }
+    function formatDateISO(d) { return d.toISOString().slice(0,10); }
+    function isInTripRange(dateStr) { return dateStr >= TRIP_START && dateStr <= TRIP_END; }
+    function isStudyDay(dateStr) {
+        if (dateStr < STUDY_START || dateStr > STUDY_END) return false;
+        const d = new Date(dateStr);
+        const day = d.getDay();
+        return day !== 0 && day !== 6;
     }
-    async function deleteEvent(date, eventId) {
-        await deleteDoc(doc(db, 'events', date + '_' + eventId));
-    }
-    async function saveChecklistItem(user, item) {
-        await setDoc(doc(db, 'checklist', user + '_' + item.id), { user, ...item });
-    }
-    async function deleteChecklistItem(user, itemId) {
-        await deleteDoc(doc(db, 'checklist', user + '_' + itemId));
-    }
-    async function saveTrip(trip) {
-        if (trip.id) {
-            await setDoc(doc(db, 'trips', trip.id), trip);
-        } else {
-            const ref = doc(collection(db, 'trips'));
-            trip.id = ref.id;
-            await setDoc(ref, trip);
-        }
-    }
-    async function deleteTrip(tripId) {
-        await deleteDoc(doc(db, 'trips', tripId));
-    }
-    async function saveStorageItem(item) {
-        if (item.id) {
-            await setDoc(doc(db, 'storage', item.id), item);
-        } else {
-            const ref = doc(collection(db, 'storage'));
-            item.id = ref.id;
-            await setDoc(ref, item);
-        }
-    }
-    async function deleteStorageItem(itemId) {
-        await deleteDoc(doc(db, 'storage', itemId));
+    function escapeHtml(text) { const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }; return String(text).replace(/[&<>"']/g, m => map[m]); }
+    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+    function fileToBase64(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
     }
 
-    // ============ ON SNAPSHOT ПОДПИСКИ ============
+    async function saveEvent(date, eventId, data) { await setDoc(doc(db, 'events', date + '_' + eventId), { date, ...data }); }
+    async function deleteEvent(date, eventId) { await deleteDoc(doc(db, 'events', date + '_' + eventId)); }
+    async function saveChecklistItem(user, item) { await setDoc(doc(db, 'checklist', user + '_' + item.id), { user, ...item }); }
+    async function deleteChecklistItem(user, itemId) { await deleteDoc(doc(db, 'checklist', user + '_' + itemId)); }
+    async function saveTrip(trip) {
+        if (trip.id) await setDoc(doc(db, 'trips', trip.id), trip);
+        else { const ref = doc(collection(db, 'trips')); trip.id = ref.id; await setDoc(ref, trip); }
+    }
+    async function deleteTrip(tripId) { await deleteDoc(doc(db, 'trips', tripId)); }
+    async function saveStorageItem(item) {
+        if (item.id) await setDoc(doc(db, 'storage', item.id), item);
+        else { const ref = doc(collection(db, 'storage')); item.id = ref.id; await setDoc(ref, item); }
+    }
+    async function deleteStorageItem(itemId) { await deleteDoc(doc(db, 'storage', itemId)); }
+
     function subscribeAll() {
         onSnapshot(collection(db, 'events'), (snap) => {
             eventsCache = {};
-            snap.forEach(d => {
-                const data = d.data();
-                if (!eventsCache[data.date]) eventsCache[data.date] = [];
-                eventsCache[data.date].push(data);
-            });
-            if (currentTab === 'calendar') {
-                if (currentView === 'month') renderCalendar();
-                else renderWeekView();
-                renderDayEvents();
-            }
+            snap.forEach(d => { const data = d.data(); if (!eventsCache[data.date]) eventsCache[data.date] = []; eventsCache[data.date].push(data); });
+            if (currentTab === 'calendar') { if (currentView === 'month') renderCalendar(); else renderWeekView(); renderDayEvents(); }
         });
-
         onSnapshot(collection(db, 'checklist'), (snap) => {
-            checklistDanil = [];
-            checklistNastya = [];
-            snap.forEach(d => {
-                const data = d.data();
-                if (data.user === 'danil') checklistDanil.push(data);
-                else if (data.user === 'nastya') checklistNastya.push(data);
-            });
+            checklistDanil = []; checklistNastya = [];
+            snap.forEach(d => { const data = d.data(); if (data.user === 'danil') checklistDanil.push(data); else if (data.user === 'nastya') checklistNastya.push(data); });
             checklistDanil.sort((a,b) => (a.order||0) - (b.order||0));
             checklistNastya.sort((a,b) => (a.order||0) - (b.order||0));
-            if (currentTab === 'checklist') renderChecklists();
+            if (currentTab === 'checklist') renderActiveChecklist();
         });
-
         onSnapshot(collection(db, 'trips'), (snap) => {
             tripsCache = [];
             snap.forEach(d => tripsCache.push({ id: d.id, ...d.data() }));
             tripsCache.sort((a,b) => (a.order||0) - (b.order||0));
             if (currentTab === 'trips') renderTrips();
         });
-
         onSnapshot(collection(db, 'storage'), (snap) => {
             storageCache = [];
             snap.forEach(d => storageCache.push({ id: d.id, ...d.data() }));
@@ -668,21 +587,18 @@
         });
     }
 
-    // ============ ПРОСМОТР ФАЙЛОВ ============
     function viewFile(file) {
         const viewer = document.getElementById('file-viewer');
-        const nameEl = document.getElementById('file-viewer-name');
-        const content = document.getElementById('file-viewer-content');
-        nameEl.textContent = file.name;
-        content.innerHTML = '';
+        document.getElementById('file-viewer-name').textContent = file.name;
+        document.getElementById('file-viewer-content').innerHTML = '';
         if (file.type === 'pdf') {
             const iframe = document.createElement('iframe');
-            iframe.src = file.data;
-            content.appendChild(iframe);
+            iframe.src = file.data + '#view=FitH';
+            document.getElementById('file-viewer-content').appendChild(iframe);
         } else {
             const img = document.createElement('img');
             img.src = file.data;
-            content.appendChild(img);
+            document.getElementById('file-viewer-content').appendChild(img);
         }
         viewer.style.display = 'flex';
     }
@@ -692,178 +608,150 @@
         document.getElementById('file-viewer-content').innerHTML = '';
     });
 
-    // ============ РЕНДЕР КАЛЕНДАРЯ (МЕСЯЦ) ============
     function renderCalendar() {
         const grid = document.getElementById('calendar-grid');
-        const label = document.getElementById('cal-month-label');
         const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-        label.textContent = `${months[calendarMonth-1]} ${calendarYear}`;
+        document.getElementById('cal-month-label').textContent = `${months[calendarMonth-1]} ${calendarYear}`;
         grid.innerHTML = '';
-
-        const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-        dayNames.forEach(d => {
-            const div = document.createElement('div');
-            div.className = 'calendar-day-name';
-            div.textContent = d;
-            grid.appendChild(div);
-        });
-
+        ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => { const div = document.createElement('div'); div.className = 'calendar-day-name'; div.textContent = d; grid.appendChild(div); });
         const firstDay = new Date(calendarYear, calendarMonth-1, 1).getDay();
         const daysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
         const startDow = firstDay === 0 ? 6 : firstDay - 1;
-
-        for (let i = 0; i < startDow; i++) {
-            const div = document.createElement('div');
-            div.className = 'calendar-day other-month';
-            grid.appendChild(div);
-        }
-
+        for (let i = 0; i < startDow; i++) { const div = document.createElement('div'); div.className = 'calendar-day other-month'; grid.appendChild(div); }
         const todayStr = new Date().toISOString().slice(0,10);
         for (let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${calendarYear}-${String(calendarMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const div = document.createElement('div');
-            div.className = 'calendar-day';
+            const div = document.createElement('div'); div.className = 'calendar-day';
             if (dateStr === todayStr) div.classList.add('today');
             if (dateStr === selectedDate) div.classList.add('selected');
             if (isInTripRange(dateStr)) div.classList.add('trip-range');
             div.textContent = d;
-
             const dayEvents = eventsCache[dateStr] || [];
-            if (dayEvents.length > 0) {
-                const dots = document.createElement('div');
-                dots.className = 'dots';
-                dayEvents.forEach(e => {
-                    const dot = document.createElement('span');
-                    dot.className = 'dot';
-                    dot.style.background = e.color || '#e63946';
-                    dots.appendChild(dot);
-                });
-                div.appendChild(dots);
-            }
-
-            div.addEventListener('click', () => {
-                selectedDate = dateStr;
-                renderCalendar();
-                renderDayEvents();
-            });
+            if (isStudyDay(dateStr)) dayEvents.push({ title: '📚 Учеба', color: '#8ecae6', eventId: 'study', isStudy: true });
+            if (dayEvents.length > 0) { const dots = document.createElement('div'); dots.className = 'dots'; dayEvents.forEach(e => { const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = e.color || '#DE2910'; dots.appendChild(dot); }); div.appendChild(dots); }
+            div.addEventListener('click', () => { selectedDate = dateStr; renderCalendar(); renderDayEvents(); });
             grid.appendChild(div);
         }
     }
 
-    // ============ РЕНДЕР НЕДЕЛИ ============
     function renderWeekView() {
-        const grid = document.getElementById('week-grid');
-        const label = document.getElementById('week-label');
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekEnd.getDate() + 6);
+        const list = document.getElementById('week-list');
+        const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 6);
         const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-        label.textContent = `${weekStart.getDate()} ${months[weekStart.getMonth()]} – ${weekEnd.getDate()} ${months[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
-        grid.innerHTML = '';
-
+        document.getElementById('week-label').textContent = `${weekStart.getDate()} ${months[weekStart.getMonth()]} – ${weekEnd.getDate()} ${months[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+        list.innerHTML = '';
         const todayStr = new Date().toISOString().slice(0,10);
         const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-
         for (let i = 0; i < 7; i++) {
-            const day = new Date(weekStart);
-            day.setDate(day.getDate() + i);
+            const day = new Date(weekStart); day.setDate(day.getDate() + i);
             const dateStr = formatDateISO(day);
-            const div = document.createElement('div');
-            div.className = 'week-day';
-            if (dateStr === todayStr) div.classList.add('today');
-            if (dateStr === selectedDate) div.classList.add('selected');
-            if (isInTripRange(dateStr)) div.classList.add('trip-range');
-            div.innerHTML = `<div class="week-date">${dayNames[i]} ${day.getDate()}</div>`;
-
-            const dayEvents = eventsCache[dateStr] || [];
-            dayEvents.forEach(e => {
-                const eventEl = document.createElement('div');
-                eventEl.className = 'week-event';
-                eventEl.style.background = e.color || '#e63946';
-                eventEl.style.color = 'white';
-                eventEl.textContent = e.title;
-                eventEl.addEventListener('click', (ev) => {
+            const card = document.createElement('div'); card.className = 'week-day-card';
+            if (dateStr === todayStr) card.classList.add('today');
+            if (dateStr === selectedDate) card.classList.add('selected');
+            if (isInTripRange(dateStr)) card.classList.add('trip-range');
+            let dayEvents = eventsCache[dateStr] || [];
+            if (isStudyDay(dateStr)) dayEvents.push({ title: '📚 Учеба', color: '#8ecae6', eventId: 'study', isStudy: true });
+            const eventsHtml = dayEvents.length > 0
+                ? dayEvents.map(e => `<span class="week-event-chip" style="background:${e.color||'#DE2910'};" data-event-id="${e.eventId}">${escapeHtml(e.title)}</span>`).join('')
+                : '<span class="week-event-empty">Нет событий</span>';
+            card.innerHTML = `<div class="week-card-header"><span class="week-card-date">${day.getDate()} ${months[day.getMonth()]}</span><span class="week-card-day">${dayNames[i]}</span></div><div class="week-events-list">${eventsHtml}</div>`;
+            card.querySelectorAll('.week-event-chip').forEach(chip => {
+                chip.addEventListener('click', (ev) => {
                     ev.stopPropagation();
-                    showEventDetail(e, dateStr);
+                    const evData = dayEvents.find(e => e.eventId === chip.dataset.eventId);
+                    if (evData && !evData.isStudy) showEventDetail(evData, dateStr);
                 });
-                div.appendChild(eventEl);
             });
-
-            div.addEventListener('click', () => {
-                selectedDate = dateStr;
-                renderWeekView();
-                renderDayEvents();
-            });
-            grid.appendChild(div);
+            card.addEventListener('click', () => { selectedDate = dateStr; renderWeekView(); renderDayEvents(); });
+            list.appendChild(card);
         }
     }
 
-    // ============ СОБЫТИЯ ДНЯ ============
     function renderDayEvents() {
         const container = document.getElementById('day-events');
-        const label = document.getElementById('selected-date-label');
-        label.textContent = new Date(selectedDate).toLocaleDateString('ru-RU', {
-            day: 'numeric', month: 'long', year: 'numeric'
-        });
-
-        const dayEvents = eventsCache[selectedDate] || [];
-        if (dayEvents.length === 0) {
+        document.getElementById('selected-date-label').textContent = new Date(selectedDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+        let dayEvents = (eventsCache[selectedDate] || []).filter(e => !e.isStudy);
+        if (isStudyDay(selectedDate)) dayEvents.unshift({ title: '📚 Учеба', color: '#8ecae6', eventId: 'study', isStudy: true });
+        const tripEvents = tripsCache.filter(t => t.scheduledDate === selectedDate);
+        if (dayEvents.length === 0 && tripEvents.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>Нет событий</p></div>';
             return;
         }
+        let html = '';
+        dayEvents.forEach(e => {
+            if (e.isStudy) {
+                html += `<div class="card"><div style="display:flex;align-items:center;gap:10px;"><span style="width:12px;height:12px;background:#8ecae6;border-radius:50%;"></span><span style="font-weight:500;">📚 Учеба</span></div></div>`;
+            } else {
+                html += `<div class="card" style="cursor:pointer;" data-event-id="${e.eventId}"><div style="display:flex;align-items:center;gap:10px;"><span style="width:12px;height:12px;background:${e.color||'#DE2910'};border-radius:50%;"></span><span style="flex:1;font-weight:500;">${escapeHtml(e.title)}</span></div></div>`;
+            }
+        });
+        tripEvents.forEach(trip => {
+            html += renderTripMiniCard(trip);
+        });
+        container.innerHTML = html;
+        container.querySelectorAll('.card').forEach(card => {
+            if (card.dataset.eventId) {
+                card.addEventListener('click', () => {
+                    const ev = dayEvents.find(e => e.eventId === card.dataset.eventId);
+                    if (ev && !ev.isStudy) showEventDetail(ev, selectedDate);
+                });
+            }
+        });
+        container.querySelectorAll('.trip-card-mini').forEach(mini => {
+            mini.addEventListener('click', () => mini.classList.toggle('expanded'));
+        });
+    }
 
-        container.innerHTML = dayEvents.map((e, i) => `
-            <div class="card" style="cursor:pointer;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <span style="width:12px;height:12px;background:${e.color||'#e63946'};border-radius:50%;flex-shrink:0;"></span>
-                    <span style="flex:1;font-weight:500;">${escapeHtml(e.title)}</span>
-                    <span style="color:var(--text-secondary);font-size:12px;">${e.time || ''}</span>
+    function renderTripMiniCard(trip) {
+        return `
+        <div class="trip-card-mini" data-id="${trip.id}">
+            <div class="trip-card-mini-preview">
+                ${trip.image ? `<img src="${trip.image}" alt=""/>` : `<div style="width:55px;height:55px;background:var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗺️</div>`}
+                <div class="trip-card-mini-info">
+                    <div class="trip-card-mini-title">🗺️ ${escapeHtml(trip.title)}</div>
+                    ${trip.note ? `<div class="trip-card-mini-note">${escapeHtml(trip.note)}</div>` : ''}
                 </div>
             </div>
-        `).join('');
-
-        container.querySelectorAll('.card').forEach((card, i) => {
-            card.addEventListener('click', () => {
-                showEventDetail(dayEvents[i], selectedDate);
-            });
-        });
+            <div class="trip-card-mini-body">
+                ${trip.image ? `<img src="${trip.image}" alt=""/>` : ''}
+                ${trip.note ? `<div class="note">${escapeHtml(trip.note)}</div>` : ''}
+            </div>
+        </div>`;
     }
 
     function showEventDetail(eventData, dateStr) {
         detailEventData = { ...eventData, date: dateStr };
-        document.getElementById('event-detail-dot').style.background = eventData.color || '#e63946';
+        document.getElementById('event-detail-dot').style.background = eventData.color || '#DE2910';
         document.getElementById('event-detail-title').textContent = eventData.title;
-        document.getElementById('event-detail-date').textContent = new Date(dateStr).toLocaleDateString('ru-RU', {
-            day: 'numeric', month: 'long', year: 'numeric'
-        });
+        document.getElementById('event-detail-date').textContent = new Date(dateStr).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
         document.getElementById('modal-event-detail').style.display = 'flex';
     }
 
     function openEventModal(eventData = null) {
         editingEventId = eventData ? eventData.eventId : null;
         document.getElementById('modal-event-title').textContent = eventData ? 'Редактировать событие' : 'Добавить событие';
+        document.getElementById('event-date-input').value = detailEventData ? detailEventData.date : selectedDate;
         document.getElementById('event-title-input').value = eventData ? eventData.title : '';
-        eventColor = eventData ? (eventData.color || '#e63946') : '#e63946';
+        eventColor = eventData ? (eventData.color || '#DE2910') : '#DE2910';
         renderColorPicker();
         document.getElementById('modal-event').style.display = 'flex';
     }
 
     function renderColorPicker() {
-        const picker = document.getElementById('event-color-picker');
-        picker.innerHTML = colors.map((c, i) =>
-            `<span class="color-dot${c===eventColor?' selected':''}" style="background:${c};" data-color="${c}" title="${colorNames[i]}"></span>`
-        ).join('');
-        picker.querySelectorAll('.color-dot').forEach(dot => {
-            dot.addEventListener('click', () => {
-                eventColor = dot.dataset.color;
-                renderColorPicker();
-            });
-        });
+        document.getElementById('event-color-picker').innerHTML = colors.map((c,i) => `<span class="color-dot${c===eventColor?' selected':''}" style="background:${c};" data-color="${c}" title="${colorNames[i]}"></span>`).join('');
+        document.querySelectorAll('#event-color-picker .color-dot').forEach(dot => { dot.addEventListener('click', () => { eventColor = dot.dataset.color; renderColorPicker(); }); });
     }
 
-    // ============ ЧЕК-ЛИСТЫ ============
-    function renderChecklists() {
-        renderChecklistGroup('danil', checklistDanil);
-        renderChecklistGroup('nastya', checklistNastya);
+    function renderActiveChecklist() {
+        if (currentChecklistUser === 'danil') {
+            document.getElementById('checklist-danil-panel').style.display = 'block';
+            document.getElementById('checklist-nastya-panel').style.display = 'none';
+            renderChecklistGroup('danil', checklistDanil);
+        } else {
+            document.getElementById('checklist-danil-panel').style.display = 'none';
+            document.getElementById('checklist-nastya-panel').style.display = 'block';
+            renderChecklistGroup('nastya', checklistNastya);
+        }
     }
 
     function renderChecklistGroup(user, items) {
@@ -873,101 +761,39 @@
         const percent = total > 0 ? Math.round((doneCount/total)*100) : 0;
         document.getElementById(`${user}-progress`).textContent = `${doneCount}/${total}`;
         document.getElementById(`${user}-bar`).style.width = percent + '%';
-
-        container.innerHTML = items.map((item) => `
-            <div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}">
-                <div class="checkbox"></div>
-                <span class="item-text">${escapeHtml(item.text)}</span>
-                <button class="delete-item">✕</button>
-            </div>
-        `).join('');
-
+        container.innerHTML = items.map(item => `<div class="checklist-item${item.done?' done':''}" data-id="${item.id}" data-user="${user}"><div class="checkbox"></div><span class="item-text">${escapeHtml(item.text)}</span><button class="delete-item">✕</button></div>`).join('');
         container.querySelectorAll('.checklist-item').forEach(el => {
-            el.querySelector('.checkbox').addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const id = el.dataset.id;
-                const u = el.dataset.user;
-                const list = u === 'danil' ? checklistDanil : checklistNastya;
-                const item = list.find(i => i.id === id);
-                if (item) {
-                    item.done = !item.done;
-                    await saveChecklistItem(u, item);
-                }
-            });
-            el.querySelector('.delete-item').addEventListener('click', async (e) => {
-                e.stopPropagation();
-                await deleteChecklistItem(el.dataset.user, el.dataset.id);
-            });
+            el.querySelector('.checkbox').addEventListener('click', async (e) => { e.stopPropagation(); const u = el.dataset.user; const list = u === 'danil' ? checklistDanil : checklistNastya; const item = list.find(i => i.id === el.dataset.id); if (item) { item.done = !item.done; await saveChecklistItem(u, item); } });
+            el.querySelector('.delete-item').addEventListener('click', async (e) => { e.stopPropagation(); await deleteChecklistItem(el.dataset.user, el.dataset.id); });
         });
     }
 
-    // ============ ПОЕЗДКИ ============
     function renderTrips() {
         const container = document.getElementById('trips-list');
-        if (tripsCache.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🗺️</div><p>Нет вариантов поездок</p></div>';
-            return;
-        }
-
+        if (tripsCache.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">🗺️</div><p>Нет вариантов поездок</p></div>'; return; }
         container.innerHTML = tripsCache.map(trip => `
-            <div class="trip-card" data-id="${trip.id}">
-                <div class="trip-card-preview">
-                    ${trip.image
-                        ? `<img src="${trip.image}" alt="${escapeHtml(trip.title)}" />`
-                        : `<div style="width:90px;height:90px;background:var(--border);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;">🗺️</div>`
-                    }
-                    <div class="preview-info">
-                        <div class="preview-title">
-                            ${escapeHtml(trip.title)}
-                            ${trip.scheduledDate ? `<span class="tag green">📅 ${new Date(trip.scheduledDate).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</span>` : ''}
-                        </div>
-                        ${trip.note ? `<div class="preview-note">${escapeHtml(trip.note)}</div>` : ''}
+            <div class="trip-card-mini">
+                <div class="trip-card-mini-preview">
+                    ${trip.image ? `<img src="${trip.image}" alt=""/>` : `<div style="width:55px;height:55px;background:var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🗺️</div>`}
+                    <div class="trip-card-mini-info">
+                        <div class="trip-card-mini-title">${escapeHtml(trip.title)} ${trip.scheduledDate ? `<span class="tag green">📅 ${new Date(trip.scheduledDate).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</span>` : ''}</div>
+                        ${trip.note ? `<div class="trip-card-mini-note">${escapeHtml(trip.note)}</div>` : ''}
                     </div>
-                    <span class="expand-icon">▶</span>
                 </div>
-                <div class="trip-card-body">
-                    ${trip.image ? `<img src="${trip.image}" alt="${escapeHtml(trip.title)}" />` : ''}
+                <div class="trip-card-mini-body">
+                    ${trip.image ? `<img src="${trip.image}" alt=""/>` : ''}
                     ${trip.note ? `<div class="note">${escapeHtml(trip.note)}</div>` : ''}
-                    <div class="trip-card-actions">
-                        <button class="btn outline move-trip-btn">📅 Переместить</button>
-                        <button class="btn outline edit-trip-btn">✏️ Изменить</button>
-                        <button class="btn danger delete-trip-btn">🗑️ Удалить</button>
+                    <div class="trip-card-actions" style="display:flex;gap:6px;margin-top:8px;">
+                        <button class="btn outline small move-trip-btn">📅 Переместить</button>
+                        <button class="btn outline small edit-trip-btn">✏️ Изменить</button>
+                        <button class="btn danger small delete-trip-btn">🗑️ Удалить</button>
                     </div>
                 </div>
-            </div>
-        `).join('');
-
-        container.querySelectorAll('.trip-card-preview').forEach(preview => {
-            preview.addEventListener('click', () => {
-                preview.parentElement.classList.toggle('expanded');
-            });
-        });
-
-        container.querySelectorAll('.move-trip-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                moveTripId = btn.closest('.trip-card').dataset.id;
-                document.getElementById('move-trip-date').value = '';
-                document.getElementById('modal-move-trip').style.display = 'flex';
-            });
-        });
-
-        container.querySelectorAll('.edit-trip-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const trip = tripsCache.find(t => t.id === btn.closest('.trip-card').dataset.id);
-                if (trip) openTripModal(trip);
-            });
-        });
-
-        container.querySelectorAll('.delete-trip-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                if (confirm('Удалить поездку?')) {
-                    await deleteTrip(btn.closest('.trip-card').dataset.id);
-                }
-            });
-        });
+            </div>`).join('');
+        container.querySelectorAll('.trip-card-mini').forEach(card => { card.addEventListener('click', (e) => { if (!e.target.closest('button')) card.classList.toggle('expanded'); }); });
+        container.querySelectorAll('.move-trip-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); moveTripId = btn.closest('.trip-card-mini').dataset.id || tripsCache.find(t => t.title === btn.closest('.trip-card-mini').querySelector('.trip-card-mini-title').textContent.split(' 📅')[0])?.id; if (!moveTripId) { const idx = Array.from(container.querySelectorAll('.trip-card-mini')).indexOf(btn.closest('.trip-card-mini')); moveTripId = tripsCache[idx]?.id; } document.getElementById('move-trip-date').value = ''; document.getElementById('modal-move-trip').style.display = 'flex'; }); });
+        container.querySelectorAll('.edit-trip-btn').forEach((btn, i) => { btn.addEventListener('click', (e) => { e.stopPropagation(); openTripModal(tripsCache[i]); }); });
+        container.querySelectorAll('.delete-trip-btn').forEach((btn, i) => { btn.addEventListener('click', async (e) => { e.stopPropagation(); if (confirm('Удалить поездку?')) await deleteTrip(tripsCache[i].id); }); });
     }
 
     function openTripModal(tripData = null) {
@@ -976,65 +802,21 @@
         document.getElementById('trip-title-input').value = tripData ? tripData.title : '';
         document.getElementById('trip-note-input').value = tripData ? (tripData.note || '') : '';
         document.getElementById('trip-image-input').value = '';
-        document.getElementById('trip-image-preview').innerHTML = tripData && tripData.image
-            ? `<img src="${tripData.image}" style="width:100%;max-height:150px;object-fit:cover;border-radius:8px;" />`
-            : '';
+        document.getElementById('trip-image-preview').innerHTML = tripData && tripData.image ? `<img src="${tripData.image}" style="width:100%;max-height:150px;object-fit:cover;border-radius:8px;" />` : '';
         document.getElementById('modal-trip').style.display = 'flex';
     }
 
-    // ============ ХРАНИЛИЩЕ ============
     function renderStorage() {
         const container = document.getElementById('storage-list');
-        if (storageCache.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Нет файлов</p></div>';
-            return;
-        }
-
+        if (storageCache.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div><p>Нет файлов</p></div>'; return; }
         container.innerHTML = storageCache.map(item => `
             <div class="storage-card" data-id="${item.id}">
-                <div class="storage-card-header">
-                    <span class="storage-card-title">📁 ${escapeHtml(item.title)}</span>
-                    <div style="display:flex;gap:4px;">
-                        <button class="btn xsmall outline edit-storage-btn">✏️</button>
-                        <button class="btn xsmall danger delete-storage-btn">🗑️</button>
-                    </div>
-                </div>
-                <div class="file-list">
-                    ${(item.files||[]).map((f, i) => `
-                        <span class="file-chip" data-id="${item.id}" data-index="${i}">
-                            <span class="file-icon">${f.type === 'pdf' ? '📄' : '🖼️'}</span>
-                            <span class="file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
-                        </span>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
-
-        container.querySelectorAll('.edit-storage-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = storageCache.find(s => s.id === btn.closest('.storage-card').dataset.id);
-                if (item) openStorageModal(item);
-            });
-        });
-
-        container.querySelectorAll('.delete-storage-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (confirm('Удалить?')) {
-                    await deleteStorageItem(btn.closest('.storage-card').dataset.id);
-                }
-            });
-        });
-
-        container.querySelectorAll('.file-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                const id = chip.dataset.id;
-                const idx = parseInt(chip.dataset.index);
-                const item = storageCache.find(s => s.id === id);
-                if (item && item.files && item.files[idx]) {
-                    viewFile(item.files[idx]);
-                }
-            });
-        });
+                <div class="storage-card-header"><span class="storage-card-title">📁 ${escapeHtml(item.title)}</span><div style="display:flex;gap:4px;"><button class="btn xsmall outline edit-storage-btn">✏️</button><button class="btn xsmall danger delete-storage-btn">🗑️</button></div></div>
+                <div class="file-list">${(item.files||[]).map((f,i) => `<span class="file-chip" data-id="${item.id}" data-index="${i}"><span class="file-icon">${f.type==='pdf'?'📄':'🖼️'}</span><span class="file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span></span>`).join('')}</div>
+            </div>`).join('');
+        container.querySelectorAll('.edit-storage-btn').forEach(btn => { btn.addEventListener('click', () => { const item = storageCache.find(s => s.id === btn.closest('.storage-card').dataset.id); if (item) openStorageModal(item); }); });
+        container.querySelectorAll('.delete-storage-btn').forEach(btn => { btn.addEventListener('click', async () => { if (confirm('Удалить?')) await deleteStorageItem(btn.closest('.storage-card').dataset.id); }); });
+        container.querySelectorAll('.file-chip').forEach(chip => { chip.addEventListener('click', () => { const id = chip.dataset.id; const idx = parseInt(chip.dataset.index); const item = storageCache.find(s => s.id === id); if (item && item.files && item.files[idx]) viewFile(item.files[idx]); }); });
     }
 
     function openStorageModal(itemData = null) {
@@ -1042,28 +824,8 @@
         document.getElementById('modal-storage-title').textContent = itemData ? 'Редактировать' : 'Добавить файлы';
         document.getElementById('storage-title-input').value = itemData ? itemData.title : '';
         document.getElementById('storage-files-input').value = '';
-        document.getElementById('storage-files-preview').textContent = itemData
-            ? `Уже загружено: ${(itemData.files||[]).length} файл(ов)`
-            : '';
+        document.getElementById('storage-files-preview').textContent = itemData ? `Уже загружено: ${(itemData.files||[]).length} файл(ов)` : '';
         document.getElementById('modal-storage').style.display = 'flex';
-    }
-
-    // ============ ВСПОМОГАТЕЛЬНЫЕ ============
-    function escapeHtml(text) {
-        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-        return String(text).replace(/[&<>"']/g, m => map[m]);
-    }
-
-    function generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    }
-
-    function fileToBase64(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.readAsDataURL(file);
-        });
     }
 
     function switchTab(tab) {
@@ -1073,325 +835,95 @@
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
         document.querySelectorAll('.fab').forEach(f => f.style.display = 'none');
-
-        if (tab === 'calendar') {
-            document.getElementById('add-event-fab').style.display = 'flex';
-            if (currentView === 'month') {
-                document.getElementById('view-month').style.display = 'block';
-                document.getElementById('view-week').classList.remove('active');
-                renderCalendar();
-            } else {
-                document.getElementById('view-month').style.display = 'none';
-                document.getElementById('view-week').classList.add('active');
-                renderWeekView();
-            }
-            renderDayEvents();
-        } else if (tab === 'checklist') {
-            renderChecklists();
-        } else if (tab === 'trips') {
-            document.getElementById('add-trip-fab').style.display = 'flex';
-            renderTrips();
-        } else if (tab === 'storage') {
-            document.getElementById('add-storage-fab').style.display = 'flex';
-            renderStorage();
-        }
+        if (tab === 'calendar') { document.getElementById('add-event-fab').style.display = 'flex'; if (currentView === 'month') { document.getElementById('view-month').style.display = 'block'; document.getElementById('view-week').classList.remove('active'); renderCalendar(); } else { document.getElementById('view-month').style.display = 'none'; document.getElementById('view-week').classList.add('active'); renderWeekView(); } renderDayEvents(); }
+        else if (tab === 'checklist') renderActiveChecklist();
+        else if (tab === 'trips') { document.getElementById('add-trip-fab').style.display = 'flex'; renderTrips(); }
+        else if (tab === 'storage') { document.getElementById('add-storage-fab').style.display = 'flex'; renderStorage(); }
     }
-        // ============ ОБРАБОТЧИКИ СОБЫТИЙ ============
-    // Навигация
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', () => switchTab(item.dataset.tab));
-    });
+        // ============ ОБРАБОТЧИКИ ============
+    document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => switchTab(item.dataset.tab)));
 
-    // Переключение вида календаря
-    document.querySelectorAll('.view-toggle button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentView = btn.dataset.view;
-            if (currentView === 'month') {
-                document.getElementById('view-month').style.display = 'block';
-                document.getElementById('view-week').classList.remove('active');
-                renderCalendar();
-            } else {
-                document.getElementById('view-month').style.display = 'none';
-                document.getElementById('view-week').classList.add('active');
-                renderWeekView();
-            }
-            renderDayEvents();
-        });
-    });
+    document.querySelectorAll('.view-toggle button').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentView = btn.dataset.view; if (currentView === 'month') { document.getElementById('view-month').style.display = 'block'; document.getElementById('view-week').classList.remove('active'); renderCalendar(); } else { document.getElementById('view-month').style.display = 'none'; document.getElementById('view-week').classList.add('active'); renderWeekView(); } renderDayEvents(); }); });
 
-    // Календарь: навигация по месяцам
-    document.getElementById('cal-prev').addEventListener('click', () => {
-        if (calendarMonth === 1) {
-            calendarMonth = 12;
-            calendarYear--;
-        } else {
-            calendarMonth--;
-        }
-        renderCalendar();
-    });
+    document.querySelectorAll('.checklist-tabs button').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.checklist-tabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentChecklistUser = btn.dataset.user; renderActiveChecklist(); }); });
 
-    document.getElementById('cal-next').addEventListener('click', () => {
-        if (calendarMonth === 12) {
-            calendarMonth = 1;
-            calendarYear++;
-        } else {
-            calendarMonth++;
-        }
-        renderCalendar();
-    });
+    document.getElementById('cal-prev').addEventListener('click', () => { if (calendarMonth === 1) { calendarMonth = 12; calendarYear--; } else calendarMonth--; renderCalendar(); });
+    document.getElementById('cal-next').addEventListener('click', () => { if (calendarMonth === 12) { calendarMonth = 1; calendarYear++; } else calendarMonth++; renderCalendar(); });
+    document.getElementById('week-prev').addEventListener('click', () => { weekStart.setDate(weekStart.getDate() - 7); renderWeekView(); });
+    document.getElementById('week-next').addEventListener('click', () => { weekStart.setDate(weekStart.getDate() + 7); renderWeekView(); });
 
-    // Неделя: навигация
-    document.getElementById('week-prev').addEventListener('click', () => {
-        weekStart.setDate(weekStart.getDate() - 7);
-        renderWeekView();
-    });
+    document.getElementById('close-event-detail-btn').addEventListener('click', () => document.getElementById('modal-event-detail').style.display = 'none');
+    document.getElementById('edit-event-from-detail-btn').addEventListener('click', () => { document.getElementById('modal-event-detail').style.display = 'none'; if (detailEventData) openEventModal(detailEventData); });
+    document.getElementById('delete-event-from-detail-btn').addEventListener('click', async () => { if (detailEventData) { await deleteEvent(detailEventData.date, detailEventData.eventId); document.getElementById('modal-event-detail').style.display = 'none'; detailEventData = null; } });
 
-    document.getElementById('week-next').addEventListener('click', () => {
-        weekStart.setDate(weekStart.getDate() + 7);
-        renderWeekView();
-    });
-
-    // Детали события
-    document.getElementById('close-event-detail-btn').addEventListener('click', () => {
-        document.getElementById('modal-event-detail').style.display = 'none';
-    });
-
-    document.getElementById('edit-event-from-detail-btn').addEventListener('click', () => {
-        document.getElementById('modal-event-detail').style.display = 'none';
-        if (detailEventData) openEventModal(detailEventData);
-    });
-
-    document.getElementById('delete-event-from-detail-btn').addEventListener('click', async () => {
-        if (detailEventData) {
-            await deleteEvent(detailEventData.date, detailEventData.eventId);
-            document.getElementById('modal-event-detail').style.display = 'none';
-            detailEventData = null;
-        }
-    });
-
-    // Добавить/редактировать событие
     document.getElementById('add-event-fab').addEventListener('click', () => openEventModal());
-
-    document.getElementById('cancel-event-btn').addEventListener('click', () => {
-        document.getElementById('modal-event').style.display = 'none';
-    });
-
+    document.getElementById('cancel-event-btn').addEventListener('click', () => document.getElementById('modal-event').style.display = 'none');
     document.getElementById('save-event-btn').addEventListener('click', async () => {
         const title = document.getElementById('event-title-input').value.trim();
-        if (!title) return;
+        const date = document.getElementById('event-date-input').value;
+        if (!title || !date) return;
         const eventId = editingEventId || generateId();
-        const date = detailEventData ? detailEventData.date : selectedDate;
-        await saveEvent(date, eventId, {
-            eventId, title, color: eventColor, time: '', date
-        });
+        await saveEvent(date, eventId, { eventId, title, color: eventColor, time: '', date });
         document.getElementById('modal-event').style.display = 'none';
-        editingEventId = null;
-        detailEventData = null;
+        editingEventId = null; detailEventData = null;
+        if (date === selectedDate) renderDayEvents();
+        if (currentView === 'month') renderCalendar(); else renderWeekView();
     });
 
-    // Чек-лист: добавление
-    document.getElementById('add-danil-btn').addEventListener('click', async () => {
-        const input = document.getElementById('new-item-danil');
-        const text = input.value.trim();
-        if (!text) return;
-        await saveChecklistItem('danil', {
-            id: generateId(), text, done: false, order: checklistDanil.length
-        });
-        input.value = '';
-    });
+    document.getElementById('add-danil-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-danil'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('danil', { id: generateId(), text, done: false, order: checklistDanil.length }); input.value = ''; });
+    document.getElementById('add-nastya-btn').addEventListener('click', async () => { const input = document.getElementById('new-item-nastya'); const text = input.value.trim(); if (!text) return; await saveChecklistItem('nastya', { id: generateId(), text, done: false, order: checklistNastya.length }); input.value = ''; });
+    document.getElementById('new-item-danil').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('add-danil-btn').click(); });
+    document.getElementById('new-item-nastya').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('add-nastya-btn').click(); });
 
-    document.getElementById('add-nastya-btn').addEventListener('click', async () => {
-        const input = document.getElementById('new-item-nastya');
-        const text = input.value.trim();
-        if (!text) return;
-        await saveChecklistItem('nastya', {
-            id: generateId(), text, done: false, order: checklistNastya.length
-        });
-        input.value = '';
-    });
-
-    document.getElementById('new-item-danil').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') document.getElementById('add-danil-btn').click();
-    });
-
-    document.getElementById('new-item-nastya').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') document.getElementById('add-nastya-btn').click();
-    });
-
-    // Поездки: модальные окна
     document.getElementById('add-trip-fab').addEventListener('click', () => openTripModal());
-
-    document.getElementById('cancel-trip-btn').addEventListener('click', () => {
-        document.getElementById('modal-trip').style.display = 'none';
-    });
-
+    document.getElementById('cancel-trip-btn').addEventListener('click', () => document.getElementById('modal-trip').style.display = 'none');
     document.getElementById('save-trip-btn').addEventListener('click', async () => {
         const title = document.getElementById('trip-title-input').value.trim();
         if (!title) return;
         const note = document.getElementById('trip-note-input').value.trim();
         const imageInput = document.getElementById('trip-image-input');
-        let image = editingTripId
-            ? (tripsCache.find(t => t.id === editingTripId)?.image || null)
-            : null;
-        if (imageInput.files[0]) {
-            image = await fileToBase64(imageInput.files[0]);
-        }
-        const tripData = {
-            id: editingTripId || null,
-            title,
-            note,
-            order: editingTripId
-                ? (tripsCache.find(t => t.id === editingTripId)?.order || tripsCache.length)
-                : tripsCache.length,
-            scheduledDate: editingTripId
-                ? (tripsCache.find(t => t.id === editingTripId)?.scheduledDate || null)
-                : null,
-            image
-        };
+        let image = editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.image || null) : null;
+        if (imageInput.files[0]) image = await fileToBase64(imageInput.files[0]);
+        const tripData = { id: editingTripId || null, title, note, order: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.order || tripsCache.length) : tripsCache.length, scheduledDate: editingTripId ? (tripsCache.find(t => t.id === editingTripId)?.scheduledDate || null) : null, image };
         await saveTrip(tripData);
         document.getElementById('modal-trip').style.display = 'none';
         editingTripId = null;
     });
 
-    // Перенос поездки на дату
-    document.getElementById('cancel-move-btn').addEventListener('click', () => {
-        document.getElementById('modal-move-trip').style.display = 'none';
-        moveTripId = null;
-    });
-
+    document.getElementById('cancel-move-btn').addEventListener('click', () => { document.getElementById('modal-move-trip').style.display = 'none'; moveTripId = null; });
     document.getElementById('confirm-move-btn').addEventListener('click', async () => {
         const date = document.getElementById('move-trip-date').value;
         if (!date || !moveTripId) return;
         const trip = tripsCache.find(t => t.id === moveTripId);
-        if (trip) {
-            trip.scheduledDate = date;
-            await saveTrip(trip);
-            // Добавляем событие в календарь
-            const eventId = 'trip_' + moveTripId;
-            await saveEvent(date, eventId, {
-                eventId,
-                title: '🗺️ ' + trip.title,
-                color: '#2a9d8f',
-                time: '',
-                date
-            });
-            switchTab('calendar');
-            selectedDate = date;
-            calendarYear = new Date(date).getFullYear();
-            calendarMonth = new Date(date).getMonth() + 1;
-            weekStart = getMonday(new Date(date));
-            if (currentView === 'month') {
-                renderCalendar();
-            } else {
-                renderWeekView();
-            }
-            renderDayEvents();
-        }
-        document.getElementById('modal-move-trip').style.display = 'none';
-        moveTripId = null;
+        if (trip) { trip.scheduledDate = date; await saveTrip(trip); await saveEvent(date, 'trip_' + moveTripId, { eventId: 'trip_' + moveTripId, title: '🗺️ ' + trip.title, color: '#2a9d8f', time: '', date }); switchTab('calendar'); selectedDate = date; calendarYear = new Date(date).getFullYear(); calendarMonth = new Date(date).getMonth() + 1; weekStart = getMonday(new Date(date)); if (currentView === 'month') renderCalendar(); else renderWeekView(); renderDayEvents(); }
+        document.getElementById('modal-move-trip').style.display = 'none'; moveTripId = null;
     });
 
-    // Хранилище
     document.getElementById('add-storage-fab').addEventListener('click', () => openStorageModal());
-
-    document.getElementById('cancel-storage-btn').addEventListener('click', () => {
-        document.getElementById('modal-storage').style.display = 'none';
-    });
-
+    document.getElementById('cancel-storage-btn').addEventListener('click', () => document.getElementById('modal-storage').style.display = 'none');
     document.getElementById('save-storage-btn').addEventListener('click', async () => {
         const title = document.getElementById('storage-title-input').value.trim();
         if (!title) return;
         const filesInput = document.getElementById('storage-files-input');
-        let files = editingStorageId
-            ? (storageCache.find(s => s.id === editingStorageId)?.files || [])
-            : [];
-        if (filesInput.files.length > 0) {
-            for (const file of filesInput.files) {
-                const data = await fileToBase64(file);
-                const type = file.type.includes('pdf') ? 'pdf' : 'image';
-                files.push({ name: file.name, type, data });
-            }
-        }
-        await saveStorageItem({
-            id: editingStorageId || null,
-            title,
-            files
-        });
+        let files = editingStorageId ? (storageCache.find(s => s.id === editingStorageId)?.files || []) : [];
+        if (filesInput.files.length > 0) { for (const file of filesInput.files) { const data = await fileToBase64(file); files.push({ name: file.name, type: file.type.includes('pdf') ? 'pdf' : 'image', data }); } }
+        const newItem = { id: editingStorageId || null, title, files };
+        await saveStorageItem(newItem);
         document.getElementById('modal-storage').style.display = 'none';
         editingStorageId = null;
     });
 
-    // Закрытие модальных окон по клику на оверлей
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                overlay.style.display = 'none';
-            }
-        });
-    });
+    document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; }); });
 
-    // Тёмная тема
     const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('china-trip-theme');
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark');
-        themeToggle.textContent = '🌙';
-    }
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        const isDark = document.body.classList.contains('dark');
-        localStorage.setItem('china-trip-theme', isDark ? 'dark' : 'light');
-        themeToggle.textContent = isDark ? '🌙' : '☀️';
-    });
+    if (localStorage.getItem('china-trip-theme') === 'dark') { document.body.classList.add('dark'); themeToggle.textContent = '🌙'; }
+    themeToggle.addEventListener('click', () => { document.body.classList.toggle('dark'); const isDark = document.body.classList.contains('dark'); localStorage.setItem('china-trip-theme', isDark ? 'dark' : 'light'); themeToggle.textContent = isDark ? '🌙' : '☀️'; });
 
-    // Уведомления
     let notificationsEnabled = false;
-    const notifyToggle = document.getElementById('notify-toggle');
+    document.getElementById('notify-toggle').addEventListener('click', async () => { if (!notificationsEnabled && 'Notification' in window) { const perm = await Notification.requestPermission(); if (perm === 'granted') { notificationsEnabled = true; document.getElementById('notify-toggle').classList.add('notify-active'); new Notification('🇨🇳 China Trip', { body: 'Уведомления включены!', icon: '🇨🇳' }); } } else { notificationsEnabled = false; document.getElementById('notify-toggle').classList.remove('notify-active'); } });
+    setInterval(() => { if (notificationsEnabled) { const today = new Date().toISOString().slice(0,10); const todayEvents = eventsCache[today] || []; const now = new Date(); if (now.getHours() === 9 && now.getMinutes() < 5 && todayEvents.length > 0) { new Notification('📅 События на сегодня', { body: todayEvents.map(e => e.title).join(', '), icon: '🇨🇳' }); } } }, 300000);
 
-    notifyToggle.addEventListener('click', async () => {
-        if (!notificationsEnabled) {
-            if ('Notification' in window) {
-                const perm = await Notification.requestPermission();
-                if (perm === 'granted') {
-                    notificationsEnabled = true;
-                    notifyToggle.classList.add('notify-active');
-                    new Notification('🇨🇳 China Trip', {
-                        body: 'Уведомления включены! Напоминания будут приходить.',
-                        icon: '🇨🇳'
-                    });
-                }
-            }
-        } else {
-            notificationsEnabled = false;
-            notifyToggle.classList.remove('notify-active');
-        }
-    });
-
-    // Проверка событий для уведомлений (раз в 5 минут)
-    setInterval(() => {
-        if (!notificationsEnabled) return;
-        const today = new Date().toISOString().slice(0,10);
-        const todayEvents = eventsCache[today] || [];
-        const now = new Date();
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-        // Отправляем уведомление в 9 утра
-        if (hour === 9 && minute < 5 && todayEvents.length > 0) {
-            new Notification('📅 События на сегодня', {
-                body: `У вас ${todayEvents.length} событий: ${todayEvents.map(e => e.title).join(', ')}`,
-                icon: '🇨🇳'
-            });
-        }
-    }, 300000);
-
-    // ============ ЗАПУСК ============
-    function init() {
-        subscribeAll();
-        switchTab('calendar');
-    }
-
+    function init() { subscribeAll(); switchTab('calendar'); }
     init();
 </script>
 </body>
